@@ -41,9 +41,11 @@ class TwigFactory implements FactoryInterface
             if (!$viewHelperManager->has($name)) {
                 return false;
             }
-
+            
             $callable = [$renderer->plugin($name), '__invoke'];
-            $options = ['is_safe' => ['html']];
+            $options = [
+                'is_safe' => ['all']
+            ];
             return new Twig_SimpleFunction(null, $callable, $options);
         });
 

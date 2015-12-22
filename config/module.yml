@@ -6,6 +6,7 @@
     - console.yml
     - assets.yml
     - assertion.yml
+    - view.yml
 
 controller_plugins:
     invokables:
