@@ -1,0 +1,23 @@
+controller_plugins:
+    invokables:
+        orm: ZfExtra\Controller\Plugin\Orm
+
+doctrine:
+    configuration:
+        orm_default:
+            metadata_cache: array
+            query_cache: array
+            result_cache: array
+            proxy_dir: data/cache/doctrine/orm/proxies
+    connection:
+        orm_default:
+            driverClass: Doctrine\DBAL\Driver\PDOMySql\Driver
+            params:
+                host: $doctrine.host
+                port: $doctrine.port
+                user: $doctrine.user
+                password: $doctrine.password
+                dbname: $doctrine.dbname
+                driverOptions: $doctrine.driver_options
+                charset: $doctrine.charset
+    

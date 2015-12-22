@@ -1,0 +1,29 @@
+service_manager:
+    factories:
+        cli: ZfExtra\Console\Service\ConsoleFactory
+        
+command_manager:
+    invokables:
+        cli.command.list: ZfExtra\Command\ListCommand
+        cli.command.debug_services: ZfExtra\Command\DebugServiceCommand
+        
+route_manager:
+    factories:
+        symfony_proxy: ZfExtra\Mvc\Service\SymfonyProxyRouteFactory
+        
+controllers:
+    factories:
+        ZfExtra.console.controller: ZfExtra\Console\Service\ConsoleControllerFactory
+
+console:
+    router:
+        defaults:
+            controller: ZfExtra.console.controller
+            action: run
+        routes:
+            symfony-proxy:
+                type: catchall
+                options:
+                    defaults:
+                        controller: ZfExtra.console.controller
+                        action: run

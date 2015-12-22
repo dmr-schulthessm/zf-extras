@@ -1,0 +1,48 @@
+@includes: 
+    - variables.yml
+    - doctrine.yml
+    - mailer.yml
+    - twig.yml
+    - console.yml
+    - assets.yml
+    - assertion.yml
+
+controller_plugins:
+    invokables:
+        config:  ZfExtra\Controller\Plugin\Config
+        service: ZfExtra\Controller\Plugin\Service
+        session: ZfExtra\Controller\Plugin\Session
+        view:    ZfExtra\Controller\Plugin\View
+        render:  ZfExtra\Controller\Plugin\Render
+        mailer:  ZfExtra\Controller\Plugin\Mailer
+        events:  ZfExtra\Controller\Plugin\Events
+        translate:  ZfExtra\Controller\Plugin\Translate
+    initializers:
+        - ZfExtra\EventManager\EventsInitializer
+        
+view_helpers:
+    invokables:
+        config: ZfExtra\View\Helper\Config
+        
+service_manager:
+    aliases:
+        config_helper: config.helper
+    factories:
+        config.helper: ZfExtra\Config\ConfigHelperFactory
+        mailer: ZfExtra\Mail\MailerFactory
+        events: ZfExtra\EventManager\EventManagerFactory
+        Application: ZfExtra\Mvc\ApplicationFactory
+        fs.local: ZfExtra\Filesystem\LocalFilesystemFactory
+    invokables:
+        listener.event_subscriber: ZfExtra\EventListener\MasterEventSubscriber
+        listener.assertions: ZfExtra\Assertion\Listener\AssertionListener
+        mailer.bodysetter: ZfExtra\Mail\Listener\BodySetterListener
+    initializers:
+        - ZfExtra\EventManager\EventsInitializer
+    
+listeners:
+    - listener.event_subscriber
+    - listener.assertions
+    
+event_listeners:
+    - mailer.bodysetter

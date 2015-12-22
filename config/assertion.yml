@@ -1,0 +1,6 @@
+zf_annotation:
+    annotations:
+        - ZfExtra\Assertion\Annotation\Assertion
+        - ZfExtra\Assertion\Annotation\Assert
+    event_listeners:
+        - ZfExtra\Assertion\Listener\AnnotationListener
