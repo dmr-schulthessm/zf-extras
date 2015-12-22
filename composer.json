@@ -1,6 +1,6 @@
 {
-    "name": "alex-oleshkevich/zf2-extras",
-    "description": "Addons pack for Zend Framework 2",
+    "name": "alex-oleshkevich/zf-extras",
+    "description": "Addon pack for Zend Framework 2",
     "type": "library",
     "license": "MIT",
     "authors": [
