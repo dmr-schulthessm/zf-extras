@@ -19,5 +19,4 @@ twig:
         optimizations: -1
     loaders:
         - twig.loader.path_stack
-    extensions: 
-        - ZfExtra\Asset\AssetTwigExtension
+    extensions: []

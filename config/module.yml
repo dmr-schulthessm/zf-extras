@@ -7,10 +7,10 @@
     - assets.yml
     - assertion.yml
     - view.yml
+    - config.yml
 
 controller_plugins:
     invokables:
-        config:  ZfExtra\Controller\Plugin\Config
         service: ZfExtra\Controller\Plugin\Service
         session: ZfExtra\Controller\Plugin\Session
         view:    ZfExtra\Controller\Plugin\View
@@ -20,10 +20,6 @@ controller_plugins:
         translate:  ZfExtra\Controller\Plugin\Translate
     initializers:
         - ZfExtra\EventManager\EventsInitializer
-        
-view_helpers:
-    invokables:
-        config: ZfExtra\View\Helper\Config
         
 service_manager:
     aliases:

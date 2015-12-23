@@ -52,11 +52,13 @@ abstract class AbstractActionController extends ZendAbstractActionController
         }
 
         $keysToRemove = array('controller', 'action');
-        $routeParams = array_filter($routeMatch->getParams(), function ($key) use ($keysToRemove) {
-            return !in_array($key, $keysToRemove);
-        }, ARRAY_FILTER_USE_KEY);
-        $arguments = array_merge(array($this->request), $routeParams);
-
+        $params = $routeMatch->getParams();
+        foreach ($params as $key => $value) {
+            if (in_array($key, $keysToRemove)) {
+                unset($params[$key]);
+            }
+        }
+        $arguments = array_merge(array($this->request), $params);
         $actionResponse = call_user_func_array(array($this, $method), $arguments);
 
         $e->setResult($actionResponse);

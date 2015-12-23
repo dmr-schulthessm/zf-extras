@@ -11,4 +11,5 @@ service_manager:
         assets: ZfExtra\Asset\Service\AssetManagerFactory
         
 view_helpers:
-    invokables: []
+    invokables:
+        image: ZfExtra\Asset\View\Helper\Image

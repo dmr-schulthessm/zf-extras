@@ -62,7 +62,11 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface
      * @param TwigResolver $resolver
      */
     public function __construct(
-    View $view, Twig_Loader_Chain $loader, Twig_Environment $enviroment, TwigResolver $resolver, $layoutInheritance = self::INHERITANCE_ZEND
+        View $view, 
+        Twig_Loader_Chain $loader, 
+        Twig_Environment $enviroment, 
+        TwigResolver $resolver, 
+        $layoutInheritance = self::INHERITANCE_ZEND
     )
     {
         $this->view = $view;

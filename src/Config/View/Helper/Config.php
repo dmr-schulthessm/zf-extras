@@ -1,59 +1,59 @@
 <?php
 
-namespace ZfExtra\Controller\Plugin;
+namespace ZfExtra\Asset\View\Helper;
 
-use Exception;
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\View\Helper\AbstractHelper;
+use Zend\View\HelperPluginManager;
 use ZfExtra\Config\ConfigHelper;
 use ZfExtra\Exception\MethodNotFoundException;
 
 /**
+ * Helper to access configs from view layer.
+ * 
+ * @property HelperPluginManager $serviceLocator
+ * 
  * @method array getConfig() Returns application config. See application.yml
  * @method array getFrameworkConfig() Returns framework config. See framework.yml
- * @method mixed getVariables() Return all variables.
  * @method mixed getVariable(string $name) Return variable value.
  * @method mixed hasVariable(string $name) Test if variable exists.
  * 
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
-class Config extends AbstractPlugin
+class Config extends AbstractHelper implements ServiceLocatorAwareInterface
 {
 
+    use ServiceLocatorAwareTrait;
+
     /**
-     * Returns value from config by $path.
+     *
+     * @var ConfigHelper
+     */
+    protected $helper;
+
+    /**
      * 
      * @param string $path
-     * @return Config|mixed
+     * @param mixed $default
+     * @return mixed|Config
      */
-    public function __invoke($path = null)
+    public function __invoke($path = null, $default = null)
     {
         if (null == $path) {
             return $this;
-        } else {
-            if ($path[0] == '$') {
-                return $this->getConfigHelper()->getVariable(substr($path, 1));
-            } else {
-                return $this->getConfigHelper()->get($path);
-            }
         }
+
+        return $this->getConfigHelper()->get($path, $default);
     }
 
     /**
-     * Return ConfigHelper service.
-     * 
-     * @return ConfigHelper
-     */
-    public function getConfigHelper()
-    {
-        return $this->getController()->getServiceLocator()->get('config_helper');
-    }
-
-    /**
-     * Proxy to ConfigHelper instance.
+     * Proxy to config helper.
      * 
      * @param string $name
      * @param array $arguments
-     * @throws Exception
+     * @return mixed
+     * @throws MethodNotFoundException
      */
     public function __call($name, $arguments)
     {
@@ -64,6 +64,15 @@ class Config extends AbstractPlugin
         }
 
         return call_user_func_array([$this->getConfigHelper(), $name], $arguments);
+    }
+
+    /**
+     * 
+     * @return ConfigHelper
+     */
+    public function getConfigHelper()
+    {
+        return $this->serviceLocator->getServiceLocator()->get('config_helper');
     }
 
 }
