@@ -34,7 +34,6 @@ class EntityResolver extends AbstractListenerAggregate
     {
         $config = $event->getConfigListener()->getMergedConfig(false);
         $modules = $event->getTarget()->getLoadedModules();
-        $newConfig = array();
         foreach ($modules as $module) {
             $ref = new ReflectionClass($module);
             $dir = dirname($ref->getFileName()) . '/src/Entity';
@@ -46,32 +45,14 @@ class EntityResolver extends AbstractListenerAggregate
             $moduleName = array_shift($parts);
             $driverName = strtolower($moduleName) . '_entities';
 
-//            $newConfig = ArrayUtils::merge($newConfig, array(
-//                'doctrine' => array(
-//                    'driver' => array(
-//                        'orm_default' => array(
-//                            'drivers' => array(
-//                                sprintf('%s\Entity', $moduleName) => $driverName
-//                            )
-//                        ),
-//                        $driverName => array(
-//                            'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-//                            'cache' => 'array',
-//                            'paths' => array($dir)
-//                        )
-//                    )
-//                )
-//            ));
-            
             $config['doctrine']['driver']['orm_default']['drivers'][sprintf('%s\Entity', $moduleName)] = $driverName;
             $config['doctrine']['driver'][$driverName] = array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(0 => $dir)
+                'paths' => array($dir)
             );
         }
         
-//        var_dump(ArrayUtils::merge($config, $newConfig)['doctrine']['driver']);die;
         $event->getConfigListener()->setMergedConfig($config);
     }
 
