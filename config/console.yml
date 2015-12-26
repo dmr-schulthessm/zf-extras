@@ -6,6 +6,7 @@ command_manager:
     invokables:
         cli.command.list: ZfExtra\Command\ListCommand
         cli.command.debug_services: ZfExtra\Command\DebugServiceCommand
+        cli.command.debug_router: ZfExtra\Command\DebugRouterCommand
         
 route_manager:
     factories:
