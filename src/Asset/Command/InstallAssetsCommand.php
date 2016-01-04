@@ -56,7 +56,7 @@ class InstallAssetsCommand extends AbstractServiceLocatorAwareCommand
                 throw new Exception('Cannot install module assets. Target dir is not writeable: ' . $config->get('assets.install_dir'));
             }
             
-            $output->writeln('Installing assets for <info>' . get_class($module) . '</info> as <comment>symlink</comment>.');
+            $output->writeln('Installing assets for <info>' . array_shift(explode('\\', get_class($module))) . '</info> as <comment>symlink</comment>.');
             
             $assetManager->install($moduleAssetsDir, $assetsTargetDir);
         }

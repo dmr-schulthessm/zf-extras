@@ -4,6 +4,7 @@ namespace ZfExtra\Command;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
@@ -14,12 +15,21 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
         $this
                 ->setName('debug:router')
                 ->setDescription('List all routes.')
+                ->addOption('dump', 'd', InputOption::VALUE_NONE, 'Dump configured array')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $routes = $this->serviceLocator->getServiceLocator()->get('config.helper')->get('router.routes');
+        
+        $doDump = $input->getOption('dump');
+        if ($doDump) {
+            print_r($routes);
+            return;
+        }
+        
+        
         $data = $this->fetch($routes);
 
         $table = new Table($output);
@@ -50,7 +60,14 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
             );
 
             if (isset($route['child_routes']) && count($route['child_routes']) > 0) {
-                $data = array_merge($data, $this->fetch($route['child_routes'], $name, $route['options']['route']));
+                $data = array_merge(
+                        $data, 
+                        $this->fetch(
+                                $route['child_routes'], 
+                                ltrim($parent . '/' . $name, '/'), 
+                                $parentPath . $route['options']['route']
+                            )
+                    );
             }
         }
         return $data;

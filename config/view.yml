@@ -1,2 +1,11 @@
+view_layouts:
+    order: [action, controller, module, route]
+    layouts:
+        route: []
+        module: []
+        controller: []
+        action: []
+
 view_helpers:
     aliases: []
+    

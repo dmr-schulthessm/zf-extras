@@ -1,0 +1,14 @@
+auth:
+    entity_class: ~
+    adapter: ~
+    options:
+        request_key_identity: email
+        request_key_credential: password
+    redirect:
+        after_login: ~
+        after_logout: ~
+    
+service_manager:
+    factories:
+        auth: ZfExtra\User\Service\AuthFactory
+        user_manager: ZfExtra\User\Service\UserManagerFactory

@@ -7,6 +7,7 @@ command_manager:
         cli.command.list: ZfExtra\Command\ListCommand
         cli.command.debug_services: ZfExtra\Command\DebugServiceCommand
         cli.command.debug_router: ZfExtra\Command\DebugRouterCommand
+        cli.command.debug_config: ZfExtra\Command\DebugConfigCommand
         
 route_manager:
     factories:

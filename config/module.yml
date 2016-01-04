@@ -8,6 +8,7 @@
     - assertion.yml
     - view.yml
     - config.yml
+    - user.yml
 
 controller_plugins:
     invokables:
@@ -43,3 +44,4 @@ listeners:
     
 event_listeners:
     - mailer.bodysetter
+    

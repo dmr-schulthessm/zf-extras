@@ -27,7 +27,7 @@ class AnnotationListener extends AbstractListenerAggregate
         
         $classHolder = $event->getTarget();
         $methodHolders = $classHolder->getMethods();
-        $config = $event->getParam('config');
+        $config = array();
         foreach ($methodHolders as $methodHolder) {
             foreach ($methodHolder->getAnnotations() as $annotation) {
                 if ($annotation instanceof Assert) {
@@ -45,10 +45,6 @@ class AnnotationListener extends AbstractListenerAggregate
     
     public function resolveControllers(array $config)
     {
-        if (!empty($this->controllers)) {
-            return;
-        }
-        
         $controllers = isset($config['controllers']) ? $config['controllers'] : array();
         $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : array();
         $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : array();

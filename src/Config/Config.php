@@ -5,6 +5,7 @@ namespace ZfExtra\Config;
 use Zend\Config\Config as ZendConfig;
 use Zend\Config\Factory;
 use Zend\Config\Processor\Constant;
+use ZfExtra\Config\Processor\CallableProperty;
 use ZfExtra\Config\Processor\Env;
 use ZfExtra\Config\Processor\Interpolator;
 
@@ -30,6 +31,7 @@ class Config
         $processorChain = new ProcessorChain;
         $processorChain->add(new Constant(false, 'const(', ')'));
         $processorChain->add(new Env('env(', ')'));
+        $processorChain->add(new CallableProperty($variables));
         $processorChain->add(new Interpolator($variables));
                 
         return $processorChain->process($config)->toArray();
