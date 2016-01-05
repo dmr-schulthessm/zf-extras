@@ -1,0 +1,17 @@
+service_manager:
+    
+    factories:
+        twig.extension.intl: ZfExtra\Intl\Factory\IntlTwigExtensionFactory
+    
+twig:
+    extensions:
+        - twig.extension.intl
+        
+translator:
+    locale: en
+
+                
+translator_plugins:
+    invokables:
+        yml: ZfExtra\Intl\Translator\Loader\YmlLoader
+        

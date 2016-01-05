@@ -10,9 +10,23 @@ use Exception;
  */
 trait ArrayToClassPropertiesTrait
 {
-    public function arrayToClassProperties(array $data, $strict = false)
+    /**
+     * Populates class from an array,
+     * First, tries to use class methods, falls back to class property.
+     * Finally, throws Exception, if $strict = true.
+     * 
+     * @param array $data
+     * @param bool $strict
+     * @param array $mapping Map array key to object property
+     * @throws Exception if $strict = true
+     */
+    public function arrayToClassProperties(array $data, $strict = false, array $mapping = array())
     {
         foreach ($data as $property => $value) {
+            if (isset($mapping[$property])) {
+                $property = $mapping[$property];
+            }
+            
             $method = 'set' . $property;
             if (method_exists($this, $method)) {
                 call_user_func_array([$this, $method], [$value]);

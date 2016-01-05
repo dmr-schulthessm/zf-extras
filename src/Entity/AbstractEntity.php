@@ -2,9 +2,10 @@
 
 namespace ZfExtra\Entity;
 
+use ZfExtra\Support\ArrayToClassPropertiesProviderInterface;
 use ZfExtra\Support\ArrayToClassPropertiesTrait;
 
-abstract class AbstractEntity
+class AbstractEntity implements ArrayToClassPropertiesProviderInterface
 {
 
     use ArrayToClassPropertiesTrait;

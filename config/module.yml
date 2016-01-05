@@ -9,6 +9,8 @@
     - view.yml
     - config.yml
     - user.yml
+    - intl.yml
+    - mvc.yml
 
 controller_plugins:
     invokables:
@@ -23,10 +25,7 @@ controller_plugins:
         - ZfExtra\EventManager\EventsInitializer
         
 service_manager:
-    aliases:
-        config_helper: config.helper
     factories:
-        config.helper: ZfExtra\Config\ConfigHelperFactory
         mailer: ZfExtra\Mail\MailerFactory
         events: ZfExtra\EventManager\EventManagerFactory
         Application: ZfExtra\Mvc\ApplicationFactory

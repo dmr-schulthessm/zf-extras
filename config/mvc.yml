@@ -1,0 +1,12 @@
+mvc:
+    doctrine_object_injector:
+        object_managers:
+            orm: doctrine.entitymanager.orm_default
+        object_mapping:
+            orm:
+                - ZfExtra\Entity\AbstractEntity
+        injections: []
+            
+service_manager:
+    factories:
+        doctrine_object_injector: ZfExtra\Mvc\Factory\DoctrineObjectInjectorFactory

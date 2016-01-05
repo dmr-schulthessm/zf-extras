@@ -5,6 +5,7 @@ namespace ZfExtra\EventListener;
 use Exception;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -36,18 +37,22 @@ class MasterEventSubscriber extends AbstractListenerAggregate implements Service
     public function onBootstrap(MvcEvent $event)
     {
         $appEvents = $this->serviceLocator->get('config_helper')->get('event_listeners');
-        foreach ($appEvents as $listenerConfig) {
-            if (is_string($listenerConfig)) {
-                if ($this->serviceLocator->has($listenerConfig)) {
-                    $listener = $this->serviceLocator->get($listenerConfig);
-                } else if (class_exists($listenerConfig)) {
-                    $listener = new $listener;
+        foreach ($appEvents as $listenerClass) {
+            if (is_string($listenerClass)) {
+                if ($this->serviceLocator->has($listenerClass)) {
+                    $listener = $this->serviceLocator->get($listenerClass);
+                } else if (class_exists($listenerClass)) {
+                    $listener = new $listenerClass;
                 } else {
                     throw new Exception('Unknown event listener: "' . $listener . '"');
                 }
             }
 
-            $this->events->attachAggregate($listener);
+            if ($listener instanceof ListenerAggregateInterface) {
+                $this->events->attachAggregate($listener);
+            } else {
+                $this->events->attach($event, $callback);
+            }
         }
     }
 

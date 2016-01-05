@@ -5,6 +5,8 @@ namespace ZfExtra\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Zend\EventManager\EventManager;
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Zend\Mvc\Exception\DomainException;
 use Zend\Mvc\MvcEvent;
@@ -27,6 +29,9 @@ use ZfExtra\Mail\Mailer;
  * @method EventManager events() Return app's event manager.
  * @method EntityRepository|EntityManager|AbstractEntity orm(string $repositoryClass = null, string $entityManager = 'doctrine.entitymanager.orm_default') Get doctrine entity manager.
  * @method string translate($message, $textDomain = 'default', $locale = null) Translate a string
+ * 
+ * @property Request $request
+ * @property Response $response
  * 
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
@@ -58,9 +63,10 @@ abstract class AbstractActionController extends ZendAbstractActionController
                 unset($params[$key]);
             }
         }
-        $arguments = array_merge(array($this->request), $params);
+        
+        $injector = $this->service('doctrine_object_injector');
+        $arguments = $injector->makeArguments(static::class, $method, $params);
         $actionResponse = call_user_func_array(array($this, $method), $arguments);
-
         $e->setResult($actionResponse);
 
         return $actionResponse;

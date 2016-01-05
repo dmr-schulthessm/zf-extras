@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfExtra\Mvc\Service;
+namespace ZfExtra\Mvc\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

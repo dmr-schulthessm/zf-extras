@@ -12,7 +12,7 @@ use ZfExtra\Config\Config;
 use ZfExtra\ModuleManager\ModuleListenerManager;
 
 /**
- * Merges framework and application config.
+ * Merges framework, application and environment config.
  * 
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  * 
@@ -34,8 +34,6 @@ class ConfigMergerListener extends AbstractListenerAggregate implements ServiceL
     }
 
     /**
-     * Interpolate variables.
-     * 
      * @param ModuleEvent $e
      */
     public function onLoadModulesPost(ModuleEvent $e)
@@ -45,7 +43,17 @@ class ConfigMergerListener extends AbstractListenerAggregate implements ServiceL
         if (isset($appConfig['framework']['app_config'])) {
             $extraConfig = Config::load($appConfig['framework']['app_config']);
         }
-
+        
+        // env config
+        $env = getenv('APPLICATION_ENV');
+        if ($env) {
+            $filename = 'config/env/' . $env . '.yml';
+            if (is_file($filename)) {
+                $envConfig = Config::load($filename);
+                $extraConfig = array_replace_recursive($extraConfig, $envConfig);
+            }
+        }
+        
         $config = ArrayUtils::merge($e->getConfigListener()->getMergedConfig(false), $extraConfig);
         $e->getConfigListener()->setMergedConfig($config);
     }
