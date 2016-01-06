@@ -3,7 +3,6 @@
 namespace ZfExtra\Mail;
 
 use Exception;
-use Zend\Mail\Message as ZendMessage;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -55,13 +54,23 @@ class Mailer implements ServiceLocatorAwareInterface, EventsAwareInterface
 
     /**
      * 
-     * @param ZendMessage $message
+     * @param Message $message
      */
-    public function send(ZendMessage $message)
+    public function send(Message $message)
     {
-        $this->events->trigger(new MessageEvent(MessageEvent::EVENT_PRE_SEND, $message));
-        $this->transport->send($message);
-        $this->events->trigger(new MessageEvent(MessageEvent::EVENT_POST_SEND, $message));
+        $mailMessage = MessageConverter::convert($message);
+        $this->events->trigger(new MessageEvent(MessageEvent::EVENT_PRE_SEND, $message, ['mail_message' => $mailMessage]));
+        $this->transport->send($mailMessage);
+        $this->events->trigger(new MessageEvent(MessageEvent::EVENT_POST_SEND, $message, ['mail_message' => $mailMessage]));
+    }
+    
+    /**
+     * 
+     * @return TransportInterface
+     */
+    public function getTransport()
+    {
+        return $this->transport;
     }
 
 }

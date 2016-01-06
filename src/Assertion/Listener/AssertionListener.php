@@ -22,7 +22,7 @@ class AssertionListener extends AbstractListenerAggregate implements ServiceLoca
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 2000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 1000);
     }
 
     /**

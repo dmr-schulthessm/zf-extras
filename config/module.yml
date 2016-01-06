@@ -33,14 +33,10 @@ service_manager:
     invokables:
         listener.event_subscriber: ZfExtra\EventListener\MasterEventSubscriber
         listener.assertions: ZfExtra\Assertion\Listener\AssertionListener
-        mailer.bodysetter: ZfExtra\Mail\Listener\BodySetterListener
     initializers:
         - ZfExtra\EventManager\EventsInitializer
     
 listeners:
     - listener.event_subscriber
     - listener.assertions
-    
-event_listeners:
-    - mailer.bodysetter
     

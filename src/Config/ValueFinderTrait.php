@@ -31,7 +31,7 @@ trait ValueFinderTrait
 
         $current = $dataset;
         foreach ($paths as $path) {
-            if (!array_key_exists($path, $current)) {
+            if (!array_key_exists($path, (array) $current)) {
                 if ($strict) {
                     throw new MissingConfigParamException('Config path "' . $path . '" is not set.');
                 } else {

@@ -43,9 +43,9 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
                     $parameterName = $parameterScanner->getName();
                     $class = $parameterScanner->getClass();
                     if ($class) {
-                        $om = $this->detectObjectManager($class, $config['mvc']['doctrine_object_injector']);
-                        if (null !== $om) {
-                            $injections[$className][$methodName][$parameterName] = [$class, $om];
+                        $objectManager = $this->detectObjectManager($class, $config['mvc']['doctrine_object_injector']);
+                        if (null !== $objectManager) {
+                            $injections[$className][$methodName][$parameterName] = [$class, $objectManager];
                         }
                     } else {
                         $injections[$className][$methodName][$parameterName] = null;
@@ -63,7 +63,7 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
         $ref = new ReflectionClass($class);
         foreach ($config['object_mapping'] as $objectManager => $targets) {
             foreach ($targets as $target) {
-                if ($ref->isSubclassOf($target)) {
+                if ($ref->isSubclassOf($target) || $ref->isInstance(new $target)) {
                     return $objectManager;
                 }
             }

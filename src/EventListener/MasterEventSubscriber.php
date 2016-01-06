@@ -36,7 +36,7 @@ class MasterEventSubscriber extends AbstractListenerAggregate implements Service
      */
     public function onBootstrap(MvcEvent $event)
     {
-        $appEvents = $this->serviceLocator->get('config_helper')->get('event_listeners');
+        $appEvents = (array) $this->serviceLocator->get('config_helper')->get('event_listeners');
         foreach ($appEvents as $listenerClass) {
             if (is_string($listenerClass)) {
                 if ($this->serviceLocator->has($listenerClass)) {
