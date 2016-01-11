@@ -7,9 +7,17 @@ use Zend\Code\Scanner\FileScanner;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\ModuleEvent;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Stdlib\ArrayUtils;
+use ZfExtra\Mvc\DoctrineObjectInjector;
 
-class DoctrineObjectInjectionListener extends AbstractListenerAggregate
+class DoctrineObjectInjectionListener extends AbstractListenerAggregate implements ServiceLocatorAwareInterface
 {
+
+    use ServiceLocatorAwareTrait;
 
     /**
      * 
@@ -18,6 +26,7 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig'], -1);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 1100);
     }
 
     /**
@@ -28,6 +37,8 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
     {
         $config = $event->getConfigListener()->getMergedConfig(false);
 
+        $resolvedControllers = $this->resolveControllers($config);
+        
         $controllers = array_merge($config['controllers']['invokables'], $config['controllers']['factories']);
         $injections = array();
         foreach ($controllers as $controller) {
@@ -36,8 +47,10 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
             $classScanner = $fileScanner->getClass($controller);
             $methods = $classScanner->getMethods();
             $className = $classScanner->getName();
+            $controllerName = $resolvedControllers[$className];
             foreach ($methods as $method) {
                 $methodName = $method->getName();
+                $actionName = preg_replace('/Action$/', '', $methodName);
                 foreach ($method->getParameters() as $parameter) {
                     $parameterScanner = $method->getParameter($parameter);
                     $parameterName = $parameterScanner->getName();
@@ -45,10 +58,10 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
                     if ($class) {
                         $objectManager = $this->detectObjectManager($class, $config['mvc']['doctrine_object_injector']);
                         if (null !== $objectManager) {
-                            $injections[$className][$methodName][$parameterName] = [$class, $objectManager];
+                            $injections[$controllerName][$actionName][$parameterName] = [$class, $objectManager];
                         }
                     } else {
-                        $injections[$className][$methodName][$parameterName] = null;
+                        $injections[$controllerName][$actionName][$parameterName] = null;
                     }
                 }
             }
@@ -58,16 +71,49 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate
         $event->getConfigListener()->setMergedConfig($config);
     }
 
+    public function onDispatch(MvcEvent $event)
+    {
+        /* @var $routeMatch RouteMatch */
+        $routeMatch = $event->getRouteMatch();
+        
+        /* @var $injector DoctrineObjectInjector */
+        $injector = $this->serviceLocator->get('doctrine_object_injector');
+        
+        $keysToRemove = array('controller', 'action');
+        $params = $routeMatch->getParams();
+        foreach ($params as $key => $value) {
+            if (in_array($key, $keysToRemove)) {
+                unset($params[$key]);
+            }
+        }
+        
+        $arguments = $injector->makeArguments($routeMatch->getParam('controller'), $routeMatch->getParam('action'), $params);
+        $event->setParam('__method_arguments', $arguments);
+    }
+
     private function detectObjectManager($class, $config)
     {
         $ref = new ReflectionClass($class);
         foreach ($config['object_mapping'] as $objectManager => $targets) {
             foreach ($targets as $target) {
-                if ($ref->isSubclassOf($target) || $ref->isInstance(new $target)) {
+                if ($ref->isSubclassOf($target)) {
+                    return $objectManager;
+                }
+
+                if ($ref->isInstantiable()) {
                     return $objectManager;
                 }
             }
         }
     }
 
+    public function resolveControllers(array $config)
+    {
+        $controllers = isset($config['controllers']) ? $config['controllers'] : array();
+        $controllers['invokables'] = isset($controllers['invokables']) ? $controllers['invokables'] : array();
+        $controllers['factories'] = isset($controllers['factories']) ? $controllers['factories'] : array();
+
+        $controllers = ArrayUtils::merge($controllers['invokables'], $controllers['factories']);
+        return array_flip($controllers);
+    }
 }

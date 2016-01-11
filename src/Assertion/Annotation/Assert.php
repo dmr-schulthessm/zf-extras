@@ -9,12 +9,19 @@ use Zend\Code\Annotation\AnnotationInterface;
  */
 class Assert implements AnnotationInterface
 {
+
     /**
      *
      * @var string
      */
     public $name;
-    
+
+    /**
+     *
+     * @var array
+     */
+    public $options = array();
+
     /**
      * 
      * @param string $content
@@ -23,7 +30,7 @@ class Assert implements AnnotationInterface
     {
         
     }
-    
+
     /**
      * 
      * @return string
@@ -31,6 +38,11 @@ class Assert implements AnnotationInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 
 }

@@ -18,6 +18,7 @@ class AssertionManager extends AbstractPluginManager
     }
 
     /**
+     * Returns assertions.
      * 
      * @param string $controller
      * @param string $action
@@ -25,12 +26,25 @@ class AssertionManager extends AbstractPluginManager
      */
     public function find($controller, $action)
     {
-        $config = $this->getServiceLocator()->get('config.helper');
-        $assertions = array();
-        $configured = $config->get(sprintf('asserts.%s.%s', $controller, $action), array());
+        $configured = $this->findConfig($controller, $action);
         foreach ($configured as $assertion) {
-            $assertions[] = $this->get($assertion);
+            $instance = $this->get($assertion['assert']);
+            $instance->setOptions($assertion['options']);
+            $assertions[] = $instance;
         }
         return $assertions;
+    }
+    
+    /**
+     * Returns assertion config array.
+     * 
+     * @param string $controller
+     * @param string $action
+     * @return array
+     */
+    public function findConfig($controller, $action)
+    {
+        $config = $this->getServiceLocator()->get('config.helper');
+        return $config->get(sprintf('asserts.%s.%s', $controller, $action), array());
     }
 }

@@ -36,7 +36,10 @@ class AnnotationListener extends AbstractListenerAggregate
                         $controller = $this->controllers[$controller];
                     }
                     $method = preg_replace('/Action$/', '', $methodHolder->getMethod()->getName());
-                    $config['asserts'][$controller][$method][] = $annotation->getName();
+                    $config['asserts'][$controller][$method][] = array(
+                        'assert' => $annotation->getName(),
+                        'options' => $annotation->getOptions()
+                    );
                 }
             }
         }

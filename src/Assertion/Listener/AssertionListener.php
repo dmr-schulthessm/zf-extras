@@ -32,9 +32,10 @@ class AssertionListener extends AbstractListenerAggregate implements ServiceLoca
     public function onDispatch(MvcEvent $event)
     {
         $assertionManager = $this->serviceLocator->get('AssertionManager');
-        $asserts = $assertionManager->find($event->getRouteMatch()->getParam('controller'), $event->getRouteMatch()->getParam('action'));
-        foreach ($asserts as $assert) {
-            if (!$assert->test($event)) {
+        $assertConfig = $assertionManager->findConfig($event->getRouteMatch()->getParam('controller'), $event->getRouteMatch()->getParam('action'));
+        foreach ($assertConfig as $config) {
+            $assert = $assertionManager->get($config['assert']);
+            if (!$assert->test($event, $config['options'])) {
                 return call_user_func_array([$assert, 'onFail'], array($event));
             }
         }

@@ -56,17 +56,7 @@ abstract class AbstractActionController extends ZendAbstractActionController
             $method = 'notFoundAction';
         }
 
-        $keysToRemove = array('controller', 'action');
-        $params = $routeMatch->getParams();
-        foreach ($params as $key => $value) {
-            if (in_array($key, $keysToRemove)) {
-                unset($params[$key]);
-            }
-        }
-        
-        $injector = $this->service('doctrine_object_injector');
-        $arguments = $injector->makeArguments(static::class, $method, $params);
-        $actionResponse = call_user_func_array(array($this, $method), $arguments);
+        $actionResponse = call_user_func_array(array($this, $method), $e->getParam('__method_arguments'));
         $e->setResult($actionResponse);
 
         return $actionResponse;

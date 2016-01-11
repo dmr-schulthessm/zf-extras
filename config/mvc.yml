@@ -4,9 +4,17 @@ mvc:
             orm: doctrine.entitymanager.orm_default
         object_mapping:
             orm:
-                - ZfExtra\Entity\AbstractEntity
+                - ZfExtra\Entity\EntityInterface
         injections: []
             
+assertions:
+    invokables:
+        required: ZfExtra\Mvc\Assertion\Required
+            
 service_manager:
+    aliases:
+        ZfExtra\Mvc\Listener\DoctrineObjectInjectionListener: doctrine_object_injector_listener
+    invokables:
+        doctrine_object_injector_listener: ZfExtra\Mvc\Listener\DoctrineObjectInjectionListener
     factories:
         doctrine_object_injector: ZfExtra\Mvc\Factory\DoctrineObjectInjectorFactory
