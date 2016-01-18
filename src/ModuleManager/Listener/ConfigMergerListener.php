@@ -45,7 +45,7 @@ class ConfigMergerListener extends AbstractListenerAggregate implements ServiceL
         }
         
         // env config
-        $env = getenv('APPLICATION_ENV');
+        $env = getenv($appConfig['framework']['env_key']);
         if ($env) {
             $filename = 'config/env/' . $env . '.yml';
             if (is_file($filename)) {

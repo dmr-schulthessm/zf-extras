@@ -3,6 +3,7 @@
 namespace ZfExtra\Mvc;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Zend\Filter\Word\DashToCamelCase;
 
 class DoctrineObjectInjector
 {
@@ -39,6 +40,8 @@ class DoctrineObjectInjector
      */
     public function makeArguments($controller, $action, array $params)
     {
+        $filter = new DashToCamelCase;
+        $action = lcfirst($filter->filter($action));
         $result = array();
         if (isset($this->config['injections'][$controller][$action])) {
             $injections = $this->config['injections'][$controller][$action];
