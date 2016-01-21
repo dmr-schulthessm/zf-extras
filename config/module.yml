@@ -21,6 +21,7 @@ controller_plugins:
         mailer:  ZfExtra\Controller\Plugin\Mailer
         events:  ZfExtra\Controller\Plugin\Events
         translate:  ZfExtra\Controller\Plugin\Translate
+        form:  ZfExtra\Controller\Plugin\Form
     initializers:
         - ZfExtra\EventManager\EventsInitializer
         

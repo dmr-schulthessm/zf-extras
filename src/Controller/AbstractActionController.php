@@ -5,6 +5,7 @@ namespace ZfExtra\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Zend\EventManager\EventManager;
+use Zend\Form\Form;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
@@ -28,6 +29,7 @@ use ZfExtra\Mail\Mailer;
  * @method Mailer mailer() Send email message or get a mailer instance.
  * @method EventManager events() Return app's event manager.
  * @method EntityRepository|EntityManager|AbstractEntity orm(string $repositoryClass = null, string $entityManager = 'doctrine.entitymanager.orm_default') Get doctrine entity manager.
+ * @method Form|FormElementManager form(string $name = null) Returns form instance configured with FormElementManager.
  * @method string translate($message, $textDomain = 'default', $locale = null) Translate a string
  * 
  * @property Request $request

@@ -6,6 +6,8 @@ service_manager:
         twig.loader: ZfExtra\Twig\Service\LoaderFactory
         twig.loader.path_stack: ZfExtra\Twig\Service\PathStackLoaderFactory
         listener.twig.strategy: ZfExtra\Twig\Service\TwigStrategyFactory
+    aliases:
+        twig: twig.renderer
 
 twig:
     options:
