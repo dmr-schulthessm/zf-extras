@@ -103,4 +103,20 @@ class EntityRepository extends DoctrineEntityRepository
     {
         return $this->removeBy(array());
     }
+    
+    /**
+     * Remove old version for versioned entities.
+     * 
+     * @param int $currentRevision
+     * @param string $revisionColumn
+     * @return int
+     */
+    public function removeOldRevisions($currentRevision, $revisionColumn)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->delete();
+        $qb->where(sprintf('e.%s < :revision', $revisionColumn));
+        $qb->setParameter('revision', $currentRevision);
+        return $qb->getQuery()->getResult();
+    }
 }
