@@ -3,6 +3,7 @@
 namespace ZfExtra\Entity;
 
 use Doctrine\ORM\EntityRepository as DoctrineEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Exception;
 use ZfExtra\Support\ArrayImportProviderInterface;
 use ZfExtra\Support\ArrayToClassPropertiesProviderInterface;
@@ -118,5 +119,28 @@ class EntityRepository extends DoctrineEntityRepository
         $qb->where(sprintf('e.%s < :revision', $revisionColumn));
         $qb->setParameter('revision', $currentRevision);
         return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @param QueryBuilder $qb
+     * @param array $criteria
+     * @return QueryBuilder
+     */
+    public function addCriteriaToWhere(QueryBuilder $qb, array $criteria = []) 
+    {
+        foreach ($criteria as $column => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+            
+            if (is_array($value)) {
+                $qb->andWhere($qb->expr()->in(sprintf('v.%s', $column), $value));
+            } else {
+                $qb->andWhere(sprintf('v.%s = :%1$s', $column));
+                $qb->setParameter($column, $value);
+            }
+        }
+        return $qb;
     }
 }
