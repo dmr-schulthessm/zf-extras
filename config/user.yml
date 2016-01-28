@@ -1,6 +1,5 @@
 auth:
-    entity_class: ~
-    adapter: ~
+    service: ~
     options:
         request_key_identity: email
         request_key_credential: password
@@ -8,7 +7,14 @@ auth:
         after_login: ~
         after_logout: ~
     
+user:
+    entity_class: ~
+    
 service_manager:
     factories:
         auth: ZfExtra\User\Service\AuthFactory
         user_manager: ZfExtra\User\Service\UserManagerFactory
+        
+command_manager:
+    invokables:
+        cli.command.user.create: ZfExtra\User\Command\CreateUserCommand

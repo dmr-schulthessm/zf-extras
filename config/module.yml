@@ -11,6 +11,7 @@
     - user.yml
     - intl.yml
     - mvc.yml
+    - acl.yml
 
 controller_plugins:
     invokables:

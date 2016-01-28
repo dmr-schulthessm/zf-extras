@@ -16,8 +16,15 @@ namespace ZfExtra\User;
  */
 interface UserInterface
 {
+    public function getId();
 
+    public function setEmail($email);
+    
     public function getEmail();
 
     public function getPassword();
+    
+    public function setPlainPassword($password);
+    
+    public function getDisplayName();
 }

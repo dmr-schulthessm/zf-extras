@@ -23,9 +23,9 @@ class UserManagerFactory implements FactoryInterface
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config')['auth'];
+        $config = $serviceLocator->get('config.helper');
         $em = $serviceLocator->get('doctrine.entitymanager.orm_default');
-        return new UserManager($em, $config['entity_class']);
+        return new UserManager($em, $config->get('user.entity_class'));
     }
 
 }

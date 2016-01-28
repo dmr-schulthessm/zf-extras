@@ -4,7 +4,7 @@ namespace ZfExtra\User;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use ZfExtra\Entity\AbstractEntity;
+use ZfExtra\Entity\Entity;
 use ZfExtra\Support\ArrayToClassPropertiesTrait;
 
 /**
@@ -53,9 +53,9 @@ class UserManager
      */
     public function create(array $data = null, $persist = false)
     {
-        $entity = new $this->repo->getClassName();
+        $entity = new $this->entityClass;
         if (null !== $data) {
-            if ($entity instanceof AbstractEntity) {
+            if ($entity instanceof Entity) {
                 $entity->import($data, true);
             } else {
                 $this->arrayToClassProperties($data, true);

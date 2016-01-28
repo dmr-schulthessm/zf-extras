@@ -1,0 +1,25 @@
+acl:
+    roles: []
+    resources:
+        allow: []
+        deny: []
+    default_role: guest
+    
+    # permissive - allow access to unconfigured resource
+    # restrictive - deny access to unconfigured resource
+    policy: restrictive
+    violation_handlers:
+        unauthenticated: ~
+        unauthorized: ~
+            
+service_manager:
+    factories:
+        acl: ZfExtra\Acl\Service\AclServiceFactory
+    invokables:
+        ZfExtra\Acl\AclListener: ZfExtra\Acl\AclListener
+        
+zf_annotation:
+    annotations:
+        - ZfExtra\Acl\Annotation\Acl
+    event_listeners:
+        - ZfExtra\Acl\Annotation\AnnotationListener

@@ -80,7 +80,7 @@ class Auth
      * 
      * @return UserInterface
      */
-    public function identity()
+    public function getIdentity()
     {
         return $this->authService->getIdentity();
     }
