@@ -7,6 +7,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl\Acl;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Session\Container;
 use Zend\View\Helper\Navigation;
 use ZfExtra\Acl\Exception\PermissionDeniedException;
 use ZfExtra\Mvc\Application;
@@ -46,7 +47,8 @@ class AclListener extends AbstractListenerAggregate
                     if (!$handler) {
                         return $this->triggerUnauthorizedError($app, $event);
                     } else {
-//                        $event->setParam('__request_uri', $sm->get('request')->getServer('REQUEST_URI'));
+                        $session = new Container('acl');
+                        $session->redirectAfterLoginTo = $sm->get('request')->getServer('REQUEST_URI');
                         $event->getRouteMatch()->setParam('controller', $handler['controller']);
                         $event->getRouteMatch()->setParam('action', $handler['action']);
                         return false;
