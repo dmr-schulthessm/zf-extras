@@ -16,7 +16,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
         $serviceManager = $event->getApplication()->getServiceManager();
         /* @var $config ConfigHelper */
         $config = $serviceManager->get('config.helper');
-        $serviceManager->get('mvctranslator')->getCache()->setCaching(!$config->getVariable('debug'));
+        $translatorCache = $serviceManager->get('mvctranslator')->getCache();
+        if ($translatorCache) {
+            $translatorCache->setCaching(!$config->getVariable('debug'));
+        }
     }
 
     /**
