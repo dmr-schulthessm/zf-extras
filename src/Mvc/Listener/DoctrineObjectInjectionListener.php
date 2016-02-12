@@ -2,6 +2,7 @@
 
 namespace ZfExtra\Mvc\Listener;
 
+use Doctrine\ORM\EntityNotFoundException;
 use ReflectionClass;
 use Zend\Code\Scanner\FileScanner;
 use Zend\EventManager\AbstractListenerAggregate;
@@ -87,8 +88,13 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate implemen
             }
         }
         
-        $arguments = $injector->makeArguments($routeMatch->getParam('controller'), $routeMatch->getParam('action'), $params);
-        $event->setParam('__method_arguments', $arguments);
+        try {
+            $arguments = $injector->makeArguments($routeMatch->getParam('controller'), $routeMatch->getParam('action'), $params);
+            $event->setParam('__method_arguments', $arguments);
+        } catch (EntityNotFoundException $e) {
+            $event->getRouteMatch()->setParam('action', 'not-found');
+            $event->setParam('__method_arguments', []);
+        }
     }
 
     private function detectObjectManager($class, $config)

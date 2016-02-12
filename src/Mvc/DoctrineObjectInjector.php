@@ -3,6 +3,7 @@
 namespace ZfExtra\Mvc;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityNotFoundException;
 use Zend\Filter\Word\DashToCamelCase;
 
 class DoctrineObjectInjector
@@ -53,7 +54,11 @@ class DoctrineObjectInjector
                 if (is_array($injection)) {
                     list($entity, $manager) = $injection;
                     if (is_scalar($value)) {
-                        $result[$name] = call_user_func_array([$this->objectManagers[$manager]->getRepository($entity), 'find'], [$value]);
+                        $entity = call_user_func_array([$this->objectManagers[$manager]->getRepository($entity), 'find'], [$value]);
+                        if (!$entity) {
+                            throw new EntityNotFoundException;
+                        }
+                        $result[$name] = $entity;
                     }
                 } else {
                     $result[$variable] = $value;
