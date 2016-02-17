@@ -12,4 +12,12 @@ class PathStackLoader extends Twig_Loader_Filesystem
         }
         return $name;
     }
+    
+    /**
+     * 
+     */
+    public function locateTemplate($name)
+    {
+        return $this->findTemplate($name, true);
+    }
 }

@@ -6,7 +6,6 @@ use Twig_Environment;
 use Twig_SimpleFunction;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Renderer\PhpRenderer;
 
 class TwigFactory implements FactoryInterface
 {
@@ -14,8 +13,7 @@ class TwigFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $viewHelperManager = $serviceLocator->get('ViewHelperManager');
-        $renderer = new PhpRenderer();
-        $renderer->setHelperPluginManager($viewHelperManager);
+        $phpRenderer = $serviceLocator->get('ViewRenderer');
 
         $config = $serviceLocator->get('Config');
         $env = new Twig_Environment($serviceLocator->get('twig.loader'), $config['twig']['options']);
@@ -37,12 +35,12 @@ class TwigFactory implements FactoryInterface
             }
         }
 
-        $env->registerUndefinedFunctionCallback(function ($name) use ($viewHelperManager, $renderer) {
+        $env->registerUndefinedFunctionCallback(function ($name) use ($viewHelperManager, $phpRenderer) {
             if (!$viewHelperManager->has($name)) {
                 return false;
             }
             
-            $callable = [$renderer->plugin($name), '__invoke'];
+            $callable = [$phpRenderer->plugin($name), '__invoke'];
             $options = [
                 'is_safe' => ['all']
             ];

@@ -22,7 +22,7 @@ class YmlLoader extends AbstractFileLoader
             }
             unset($textDomain['']);
         }
-        return $textDomain->getArrayCopy();
+        return $textDomain;
     }
 
 }

@@ -7,6 +7,7 @@ use Twig_Loader_Chain;
 use Zend\View\Exception\DomainException;
 use Zend\View\Model\ModelInterface;
 use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Renderer\RendererInterface;
 use Zend\View\Renderer\TreeRendererInterface;
 use Zend\View\Resolver\ResolverInterface;
@@ -47,6 +48,12 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface
      * @var TwigResolver
      */
     protected $resolver;
+    
+    /**
+     *
+     * @var PhpRenderer
+     */
+    protected $fallbackRenderer;
 
     /**
      *
@@ -66,6 +73,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface
         Twig_Loader_Chain $loader, 
         Twig_Environment $enviroment, 
         TwigResolver $resolver, 
+        PhpRenderer $fallbackRenderer = null,
         $layoutInheritance = self::INHERITANCE_ZEND
     )
     {
@@ -73,6 +81,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface
         $this->loader = $loader;
         $this->environment = $enviroment;
         $this->resolver = $resolver;
+        $this->fallbackRenderer = $fallbackRenderer;
         $this->layoutInheritance = $layoutInheritance;
     }
 
@@ -146,10 +155,21 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface
                 $values['content'] = '';
             }
             foreach ($model as $child) {
+                $isTwigTemplate = false;
+                try {
+                    $path = $this->loader->getCacheKey($child->getTemplate());
+                    $isTwigTemplate = substr($path, -5) == '.twig';
+                } catch (\Exception $e) {
+                    
+                }
+                
                 /** @var ViewModel $child */
-                if ($this->canRender($child->getTemplate())) {
+                if ($isTwigTemplate) {
+                    /* @var $template Twig_TemplateInterface */
                     $template = $this->resolver->resolve($child->getTemplate(), $this);
                     $values[$child->captureTo()] = $template->render((array) $child->getVariables());
+                } else {
+                    $values[$child->captureTo()] = $this->fallbackRenderer->render($child->getTemplate(), (array) $child->getVariables());
                 }
                 $child->setOption('has_parent', true);
             }
