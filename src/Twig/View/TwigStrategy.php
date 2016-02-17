@@ -4,6 +4,7 @@ namespace ZfExtra\Twig\View;
 
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\View\Model\ViewModel;
 use Zend\View\ViewEvent;
 
 class TwigStrategy extends AbstractListenerAggregate
@@ -42,7 +43,12 @@ class TwigStrategy extends AbstractListenerAggregate
      */
     public function selectRenderer(ViewEvent $e)
     {
-        if ($this->renderer->canRender($e->getModel()->getTemplate())) {
+        $model = $e->getModel();
+        if (!$model instanceof ViewModel) {
+            return false;
+        }
+        
+        if ($this->renderer->canRender($model->getTemplate())) {
             return $this->renderer;
         }
         return false;
