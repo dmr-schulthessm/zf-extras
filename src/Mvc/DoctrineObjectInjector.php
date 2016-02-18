@@ -52,10 +52,10 @@ class DoctrineObjectInjector
                 $name = key($injections);
                 $injection = current($injections);
                 if (is_array($injection)) {
-                    list($entity, $manager) = $injection;
+                    list($entity, $manager, $isRequired) = $injection;
                     if (is_scalar($value)) {
                         $entity = call_user_func_array([$this->objectManagers[$manager]->getRepository($entity), 'find'], [$value]);
-                        if (!$entity) {
+                        if (!$entity && $isRequired) {
                             throw new EntityNotFoundException;
                         }
                         $result[$name] = $entity;
