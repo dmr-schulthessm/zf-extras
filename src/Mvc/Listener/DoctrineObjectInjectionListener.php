@@ -59,7 +59,7 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate implemen
                     if ($class) {
                         $objectManager = $this->detectObjectManager($class, $config['mvc']['doctrine_object_injector']);
                         if (null !== $objectManager) {
-                            $injections[$controllerName][$actionName][$parameterName] = [$class, $objectManager];
+                            $injections[$controllerName][$actionName][$parameterName] = [$class, $objectManager, !$parameterScanner->isOptional()];
                         }
                     } else {
                         $injections[$controllerName][$actionName][$parameterName] = null;
