@@ -45,14 +45,14 @@ class IntlTwigExtension extends Twig_Extension
         return 'intl';
     }
 
-    public function trans($message, $textDomain = 'default', $locale = null)
+    public function trans($message, array $placeholders = [], $textDomain = 'default', $locale = null)
     {
-        return $this->translator->translate($message, $textDomain, $locale);
+        return strtr($this->translator->translate($message, $textDomain, $locale), $placeholders);
     }
 
-    public function transPlural($singular, $plural, $number, $textDomain = 'default', $locale = null)
+    public function transPlural($singular, $plural, $number, array $placeholders = [], $textDomain = 'default', $locale = null)
     {
-        return $this->translator->translatePlural($singular, $plural, $number, $textDomain, $locale);
+        return strtr($this->translator->translatePlural($singular, $plural, $number, $textDomain, $locale), $placeholders);
     }
 
 }

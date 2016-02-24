@@ -26,7 +26,6 @@ class ExtraExtension extends Twig_Extension
 
     public function isInstanceOf($var, $instance)
     {
-        var_dump($instance);die;
         return $var instanceof $instance;
     }
 
