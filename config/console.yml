@@ -17,6 +17,10 @@ controllers:
     factories:
         ZfExtra.console.controller: ZfExtra\Console\Service\ConsoleControllerFactory
 
+zf_annotation:
+    annotations:
+        - ZfExtra\Command\Annotation\Command
+
 console:
     router:
         defaults:

@@ -4,6 +4,7 @@ namespace ZfExtra\Config\Reader;
 
 use Symfony\Component\Yaml\Yaml as YamlParser;
 use Zend\Config\Reader\Yaml as ZendYaml;
+use Zend\Stdlib\ArrayUtils;
 use Zend\View\Exception\RuntimeException;
 
 /**
@@ -41,7 +42,7 @@ class Yaml extends ZendYaml
 
                 foreach ($value as $file) {
                     $reader = clone $this;
-                    $data = array_replace_recursive($data, $reader->fromFile($this->directory . '/' . $file));
+                    $data = ArrayUtils::merge($data, $reader->fromFile($this->directory . '/' . $file));
                 }
             }
 
@@ -56,11 +57,12 @@ class Yaml extends ZendYaml
                     $filename = $this->directory . '/' . $optional;
                     if (file_exists($filename)) {
                         $reader = clone $this;
-                        $data = array_replace_recursive($data, $reader->fromFile($filename));
+                        $data = ArrayUtils::merge($data, $reader->fromFile($filename));
                     }
                 }
             }
         }
+        
         return $data;
     }
 
