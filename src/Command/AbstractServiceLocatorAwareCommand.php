@@ -7,13 +7,11 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use ZfExtra\Console\CommandManager;
 
+/**
+ * @property CommandManager $serviceLocator
+ */
 abstract class AbstractServiceLocatorAwareCommand extends Command implements ServiceLocatorAwareInterface
 {
+
     use ServiceLocatorAwareTrait;
-    
-    /**
-     *
-     * @var CommandManager
-     */
-    protected $serviceLocator;
 }
