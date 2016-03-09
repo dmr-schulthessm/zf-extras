@@ -1,0 +1,8 @@
+listeners:
+    - ZfExtra\EventListener\SharedEventsListener
+module_event_listeners: []
+shared_event_listeners: []
+
+service_manager:
+    invokables:
+        ZfExtra\EventListener\SharedEventsListener: ZfExtra\EventListener\SharedEventsListener

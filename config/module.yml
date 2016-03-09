@@ -12,6 +12,7 @@
     - intl.yml
     - mvc.yml
     - acl.yml
+    - events.yml
 
 controller_plugins:
     invokables:

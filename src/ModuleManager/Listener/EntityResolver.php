@@ -6,7 +6,6 @@ use ReflectionClass;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\ModuleEvent;
-use Zend\Stdlib\ArrayUtils;
 use ZfExtra\ModuleManager\ModuleListenerManager;
 
 /**

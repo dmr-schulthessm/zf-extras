@@ -10,7 +10,7 @@ use ZfExtra\ModuleManager\ModuleListenerManager;
 class ModuleListenerManagerFactory implements FactoryInterface
 {
 
-    const CONFIG_KEY = 'module_listeners';
+    const CONFIG_KEY = 'module_event_listeners';
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
