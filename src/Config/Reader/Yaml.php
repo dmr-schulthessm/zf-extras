@@ -61,6 +61,21 @@ class Yaml extends ZendYaml
                     }
                 }
             }
+
+            if (trim($key) === '@include_php') {
+                $optionals = (array) $data[$key];
+                if ($this->directory === null) {
+                    throw new RuntimeException('Cannot process @optional statement for a json string');
+                }
+                unset($data[$key]);
+
+                foreach ($optionals as $optional) {
+                    $filename = $this->directory . '/' . $optional;
+                    if (file_exists($filename)) {
+                        $data = ArrayUtils::merge($data, include $filename);
+                    }
+                }
+            }
         }
         
         return $data;
