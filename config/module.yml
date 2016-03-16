@@ -13,20 +13,8 @@
     - mvc.yml
     - acl.yml
     - events.yml
+    - log.yml
 
-controller_plugins:
-    invokables:
-        service: ZfExtra\Controller\Plugin\Service
-        session: ZfExtra\Controller\Plugin\Session
-        view:    ZfExtra\Controller\Plugin\View
-        render:  ZfExtra\Controller\Plugin\Render
-        mailer:  ZfExtra\Controller\Plugin\Mailer
-        events:  ZfExtra\Controller\Plugin\Events
-        translate:  ZfExtra\Controller\Plugin\Translate
-        form:  ZfExtra\Controller\Plugin\Form
-    initializers:
-        - ZfExtra\EventManager\EventsInitializer
-        
 service_manager:
     factories:
         mailer: ZfExtra\Mail\MailerFactory
@@ -42,3 +30,4 @@ service_manager:
 listeners:
     - listener.event_subscriber
     - listener.assertions
+    

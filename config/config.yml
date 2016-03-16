@@ -8,6 +8,7 @@ view_helpers:
 
 service_manager:
     aliases:
-        config_helper: config.helper
+        config.helper: ZfExtra\Config\ConfigHelper
+        config_helper: ZfExtra\Config\ConfigHelper
     factories:
-        config.helper: ZfExtra\Config\ConfigHelperFactory
+        ZfExtra\Config\ConfigHelper: ZfExtra\Config\ConfigHelperFactory

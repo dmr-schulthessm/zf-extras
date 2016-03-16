@@ -4,6 +4,9 @@ namespace ZfExtra\Twig\View;
 
 use Twig_Environment;
 use Twig_Loader_Chain;
+use Twig_TemplateInterface;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\Log\Logger;
 use Zend\View\Exception\DomainException;
 use Zend\View\Model\ModelInterface;
 use Zend\View\Model\ViewModel;
@@ -12,12 +15,18 @@ use Zend\View\Renderer\RendererInterface;
 use Zend\View\Renderer\TreeRendererInterface;
 use Zend\View\Resolver\ResolverInterface;
 use Zend\View\View;
+use ZfExtra\Log\EventListener\LogEventListener;
+use ZfExtra\Log\LogEvent;
 
-class TwigRenderer implements RendererInterface, TreeRendererInterface
+class TwigRenderer implements RendererInterface, TreeRendererInterface, EventManagerAwareInterface
 {
+    
+    use \Zend\EventManager\EventManagerAwareTrait;
 
     const INHERITANCE_ZEND = 'zend';
     const INHERITANCE_EXTEND = 'extend';
+    
+    protected $eventIdentifier = LogEventListener::LOG_PROVIDER;
 
     /**
      *
@@ -166,8 +175,10 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface
                 /** @var ViewModel $child */
                 if ($isTwigTemplate) {
                     /* @var $template Twig_TemplateInterface */
-                    $template = $this->resolver->resolve($child->getTemplate(), $this);
+                    $path = $child->getTemplate();
+                    $template = $this->resolver->resolve($path, $this);
                     $values[$child->captureTo()] = $template->render((array) $child->getVariables());
+                    $this->getEventManager()->trigger(new LogEvent($this, 'render: ' . $path, Logger::INFO));
                 } else {
                     $values[$child->captureTo()] = $this->fallbackRenderer->render($child->getTemplate(), (array) $child->getVariables());
                 }

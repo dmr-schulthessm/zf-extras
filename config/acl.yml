@@ -11,12 +11,13 @@ acl:
     violation_handlers:
         unauthenticated: ~
         unauthorized: ~
+    role_resolver: ZfExtra\Acl\RoleProvider\RoleResolver
             
 service_manager:
     factories:
         acl: ZfExtra\Acl\Service\AclServiceFactory
-    invokables:
-        ZfExtra\Acl\AclListener: ZfExtra\Acl\AclListener
+        ZfExtra\Acl\AclListener: ZfExtra\Acl\Factory\AclListenerFactory
+        ZfExtra\Acl\RoleProvider\RoleResolver: ZfExtra\Acl\Factory\RoleResolverFactory
         
 zf_annotation:
     annotations:

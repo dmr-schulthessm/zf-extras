@@ -10,6 +10,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Helper\Navigation;
 use ZfExtra\Acl\Exception\PermissionDeniedException;
+use ZfExtra\Acl\RoleResolver\RoleResolverInterface;
 use ZfExtra\Mvc\Application;
 
 /**
@@ -19,6 +20,21 @@ use ZfExtra\Mvc\Application;
 class AclListener extends AbstractListenerAggregate
 {
 
+    /**
+     *
+     * @var RoleResolverInterface
+     */
+    protected $roleResolver;
+
+    /**
+     * 
+     * @param RoleResolverInterface $roleResolver
+     */
+    public function __construct(RoleResolverInterface $roleResolver)
+    {
+        $this->roleResolver = $roleResolver;
+    }
+
     public function attach(EventManagerInterface $events)
     {
         if (PHP_SAPI !== 'cli') {
@@ -27,6 +43,11 @@ class AclListener extends AbstractListenerAggregate
         }
     }
 
+    /**
+     * 
+     * @param MvcEvent $event
+     * @return boolean
+     */
     public function onRoute(MvcEvent $event)
     {
         /* @var $acl Acl */
@@ -55,7 +76,6 @@ class AclListener extends AbstractListenerAggregate
                     }
                     return false;
                 } else {
-                    die('permission violation');
                     $event->setError('error-unauthorized-route');
                     $event->setParam('exception', new PermissionDeniedException('You are not authorized to access this page.'));
                     return $app->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
@@ -82,12 +102,21 @@ class AclListener extends AbstractListenerAggregate
         }
     }
 
+    /**
+     * 
+     * @param MvcEvent $e
+     */
     public function onRender(MvcEvent $e)
     {
         Navigation::setDefaultAcl($e->getApplication()->getServiceManager()->get('Acl'));
         Navigation::setDefaultRole($this->getRole($e));
     }
 
+    /**
+     * 
+     * @param MvcEvent $e
+     * @return object|null
+     */
     protected function getIdentity(MvcEvent $e)
     {
         /* @var $sm ServiceManager */
@@ -98,15 +127,16 @@ class AclListener extends AbstractListenerAggregate
         return $sm->get('Zend\Authentication\AuthenticationService')->getIdentity();
     }
 
+    /**
+     * 
+     * @param MvcEvent $e
+     * @return string
+     */
     protected function getRole(MvcEvent $e)
     {
         $sm = $e->getApplication()->getServiceManager();
         $identity = $this->getIdentity($e);
-        $role = $sm->get('config.helper')->get('acl.default_role');
-        if (is_object($identity) && $identity instanceof AclRoleProviderInterface) {
-            $role = $identity->getRole();
-        }
-        return $role;
+        return $this->roleResolver->resolve($e, $identity);
     }
 
     /**

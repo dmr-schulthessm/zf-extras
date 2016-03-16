@@ -9,3 +9,7 @@ view_layouts:
 view_helpers:
     aliases: []
     
+service_manager:
+    factories:
+        ZfExtra\View\DirectRenderer: ZfExtra\View\Factory\DirectRendererFactory
+    
