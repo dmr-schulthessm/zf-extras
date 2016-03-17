@@ -47,9 +47,12 @@ class Mailer implements ServiceLocatorAwareInterface, EventsAwareInterface
         if (!$this->transport instanceof TransportInterface) {
             throw new Exception('Transport must implement Zend\Mail\Transport\TransportInterface');
         }
-        $transportOptions = $this->transport->getOptions();
-        $transportOptions->setFromArray($options['transport']['options']);
-        $this->transport->setOptions($transportOptions);
+        
+        if (method_exists($this->transport, 'getOptions')) {
+            $transportOptions = $this->transport->getOptions();
+            $transportOptions->setFromArray($options['transport']['options']);
+            $this->transport->setOptions($transportOptions);
+        }
     }
 
     /**
