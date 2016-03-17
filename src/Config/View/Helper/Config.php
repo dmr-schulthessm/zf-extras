@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfExtra\Asset\View\Helper;
+namespace ZfExtra\Config\View\Helper;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
