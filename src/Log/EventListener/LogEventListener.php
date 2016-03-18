@@ -36,7 +36,7 @@ class LogEventListener implements SharedEventListenerInterface
     public function onEvent(EventInterface $event)
     {
         if ($event instanceof LogEvent) {
-            $this->logger->log($event->getPriority(), get_class($event->getTarget()) . ': ' . $event->getMessage(), $event->getParams());
+            $this->logger->log($event->getPriority(), $event->getMessage(), $event->getParams());
         }
     }
 

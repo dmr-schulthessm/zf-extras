@@ -9,6 +9,8 @@ logger:
         - ZfExtra\Log\ApplicationLoggerPriorityFilter
     
 service_manager:
+    invokables:
+        ZfExtra\Log\EventListener\MvcEventListener: ZfExtra\Log\EventListener\MvcEventListener
     factories:
         ZfExtra\Log\EventListener\LogEventListener: ZfExtra\Log\Factory\LogEventListenerFactory
         ZfExtra\Log\ApplicationLogger: ZfExtra\Log\Factory\ApplicationLoggerFactory
