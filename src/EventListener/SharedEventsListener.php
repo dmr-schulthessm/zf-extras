@@ -45,12 +45,13 @@ class SharedEventsListener extends AbstractListenerAggregate
             } else {
                 $sharedEventListener = new $sharedEventListener;
             }
-        }
-        if (!$sharedEventListener instanceof SharedEventListenerInterface) {
-            throw new Exception(sprintf('Class "%s" must implement "%s" in order to subscribe shared events.', get_class($sharedEventListener), SharedEventListenerInterface::class));
+            if (!$sharedEventListener instanceof SharedEventListenerInterface) {
+                throw new Exception(sprintf('Class "%s" must implement "%s" in order to subscribe shared events.', get_class($sharedEventListener), SharedEventListenerInterface::class));
+            }
+            
+            $sharedEventListener->attachShared($sm->get('SharedEventManager'));
         }
 
-        $sharedEventListener->attachShared($sm->get('SharedEventManager'));
     }
 
 }
