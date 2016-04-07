@@ -18,7 +18,9 @@ class ModuleListenerManagerFactory implements FactoryInterface
         if (!isset($config[self::CONFIG_KEY])) {
             $config[self::CONFIG_KEY] = array();
         }
-        return new ModuleListenerManager(new Config($config[self::CONFIG_KEY]));
+        $instance = new ModuleListenerManager(new Config($config[self::CONFIG_KEY]));
+        $instance->setServiceLocator($serviceLocator);
+        return $instance;
     }
 
 }

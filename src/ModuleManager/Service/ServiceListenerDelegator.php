@@ -6,6 +6,10 @@ use Zend\ModuleManager\Listener\ServiceListener;
 use Zend\ServiceManager\DelegatorFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
+use ZfExtra\Assertion\AssertionManager;
+use ZfExtra\Assertion\Factory\AssertionManagerFactory;
+use ZfExtra\Console\CommandManager;
+use ZfExtra\Console\Factory\CommandManagerFactory;
 use ZfExtra\ModuleManager\Feature\AssertionProviderInterface;
 use ZfExtra\ModuleManager\Feature\CommandProviderInterface;
 
@@ -20,14 +24,14 @@ class ServiceListenerDelegator implements DelegatorFactoryInterface
         /* @var $serviceLocator ServiceManager */
         /* @var $serviceListener ServiceListener */
         $serviceListener = $callback();
-        
-        $serviceLocator->setFactory('CommandManager', 'ZfExtra\Console\Service\CommandManagerFactory');
+
+        $serviceLocator->setFactory('CommandManager', CommandManagerFactory::class);
         $serviceListener->addServiceManager('CommandManager', 'command_manager', CommandProviderInterface::class, 'getCommandsConfig');
-        
+
         /* @var $serviceLocator ServiceManager */
-        $serviceLocator->setFactory('AssertionManager', 'ZfExtra\Assertion\Service\AssertionManagerFactory');
+        $serviceLocator->setFactory('AssertionManager', AssertionManagerFactory::class);
         $serviceListener->addServiceManager('AssertionManager', 'assertions', AssertionProviderInterface::class, 'getAssertionsConfig');
-        
+
         return $serviceListener;
     }
 

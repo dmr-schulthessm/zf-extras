@@ -1,3 +1,3 @@
 <?php
 
-include 'src/ZfExtra/Module.php';
+include 'src/Module.php';

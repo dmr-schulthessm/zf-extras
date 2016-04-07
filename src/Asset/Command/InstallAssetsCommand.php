@@ -7,8 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zend\ModuleManager\ModuleManager;
 use ZfExtra\Asset\AssetManager;
-use ZfExtra\Command\AbstractServiceLocatorAwareCommand;
 use ZfExtra\Config\ConfigHelper;
+use ZfExtra\Console\Command\AbstractServiceLocatorAwareCommand;
 use ZfExtra\Console\CommandManager;
 
 /**

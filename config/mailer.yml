@@ -1,5 +1,0 @@
-mailer:
-    transport:
-        name: $mailer.transport
-        options: $mailer.transport_options
-    messages: ~

@@ -3,6 +3,7 @@
 namespace ZfExtra\Twig\Service;
 
 use Twig_Environment;
+use Twig_LoaderInterface;
 use Twig_SimpleFunction;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -16,7 +17,7 @@ class TwigFactory implements FactoryInterface
         $phpRenderer = $serviceLocator->get('ViewRenderer');
 
         $config = $serviceLocator->get('Config');
-        $env = new Twig_Environment($serviceLocator->get('twig.loader'), $config['twig']['options']);
+        $env = new Twig_Environment($serviceLocator->get(Twig_LoaderInterface::class), $config['twig']['options']);
 
         foreach ($config['twig']['extensions'] as $extension) {
             $enable = true;
@@ -39,7 +40,7 @@ class TwigFactory implements FactoryInterface
             if (!$viewHelperManager->has($name)) {
                 return false;
             }
-            
+
             $callable = [$phpRenderer->plugin($name), '__invoke'];
             $options = [
                 'is_safe' => ['all']

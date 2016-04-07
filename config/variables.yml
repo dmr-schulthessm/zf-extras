@@ -1,6 +1,0 @@
-variables:
-    mailer:
-        transport: Zend\Mail\Transport\File
-        transport_options: 
-            path: data/mail
-#            callback: [App\Module, method]

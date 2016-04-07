@@ -13,4 +13,7 @@ class CommandManager extends AbstractPluginManager
         return $plugin instanceof Command;
     }
 
+    public function getAllCommands() {
+        return array_merge($this->invokableClasses, $this->factories);
+    }
 }
