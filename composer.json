@@ -23,7 +23,7 @@
         "zendframework/zend-cache": "^2.6",
         "zendframework/zend-console": "^2.6",
         "zendframework/zend-modulemanager": "^2.7",
-        "zendframework/zend-eventmanager": "^2.6",
+        "zendframework/zend-eventmanager": "^2.6 || ^3.0",
         "zendframework/zend-config": "^2.6",
         "symfony/yaml": "^2.7",
         "zendframework/zend-serializer": "^2.7",
