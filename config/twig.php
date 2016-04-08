@@ -26,6 +26,7 @@ return [
         ],
         'aliases' => [
             'twig' => TwigRenderer::class,
+            'TwigViewStrategy' => TwigStrategy::class
         ]
     ],
     'twig' => [

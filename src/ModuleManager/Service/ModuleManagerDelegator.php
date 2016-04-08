@@ -34,7 +34,7 @@ class ModuleManagerDelegator implements DelegatorFactoryInterface
         $listeners = $moduleListenerManager->getCanonicalNames();
 
         foreach ($listeners as $listener) {
-            $moduleManager->getEventManager()->attachAggregate($moduleListenerManager->get($listener));
+            $moduleListenerManager->get($listener)->attach($moduleManager->getEventManager());
         }
         
         return $moduleManager;

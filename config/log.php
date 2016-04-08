@@ -16,10 +16,10 @@ return [
         'formatter' => 'ZfExtra\Log\ApplicationLoggerFormatter',
         'priority' => 6,
         'writers' => [
-            0 => 'ZfExtra\Log\ApplicationLoggerStreamWriter',
+            'ZfExtra\Log\ApplicationLoggerStreamWriter',
         ],
         'filters' => [
-            0 => 'ZfExtra\Log\ApplicationLoggerPriorityFilter',
+            'ZfExtra\Log\ApplicationLoggerPriorityFilter',
         ],
     ],
     'service_manager' => [

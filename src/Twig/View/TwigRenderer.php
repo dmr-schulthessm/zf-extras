@@ -178,7 +178,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
                     $path = $child->getTemplate();
                     $template = $this->resolver->resolve($path, $this);
                     $values[$child->captureTo()] = $template->render((array) $child->getVariables());
-                    $this->getEventManager()->trigger(new LogEvent($this, 'render: ' . $path, Logger::INFO));
+                    $this->getEventManager()->triggerEvent(new LogEvent($this, 'render: ' . $path, Logger::INFO));
                 } else {
                     $values[$child->captureTo()] = $this->fallbackRenderer->render($child->getTemplate(), (array) $child->getVariables());
                 }

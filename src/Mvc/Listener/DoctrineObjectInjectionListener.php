@@ -24,7 +24,7 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate implemen
      * 
      * @param EventManagerInterface $events
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig'], -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 1100);
@@ -40,7 +40,10 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate implemen
 
         $resolvedControllers = $this->resolveControllers($config);
         
-        $controllers = array_merge($config['controllers']['invokables'], $config['controllers']['factories']);
+        $controllerInvokables = empty($config['controllers']['invokables']) ? [] : $config['controllers']['invokables'];
+        $controllerFactories = empty($config['controllers']['factories']) ? [] : $config['controllers']['factories'];
+        
+        $controllers = array_merge($controllerInvokables, $controllerFactories);
         $injections = array();
         foreach ($controllers as $controller) {
             $ref = new ReflectionClass($controller);

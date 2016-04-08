@@ -28,7 +28,7 @@ class ConfigMergerListener extends AbstractListenerAggregate implements ServiceL
      * @param EventManagerInterface $events
      * @return InterpolateListener
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->callbacks[] = $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onLoadModulesPost'], 200);
     }
