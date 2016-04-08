@@ -48,7 +48,7 @@ abstract class AbstractActionController extends ZendAbstractActionController
              * @todo Determine requirements for when route match is missing.
              *       Potentially allow pulling directly from request metadata?
              */
-            throw new DomainException('Missing route matches; unsure how to retrieve action');
+            throw new DomainException('Missing route matche; unsure how to retrieve action');
         }
 
         $action = $routeMatch->getParam('action', 'not-found');
@@ -58,7 +58,8 @@ abstract class AbstractActionController extends ZendAbstractActionController
             $method = 'notFoundAction';
         }
 
-        $actionResponse = call_user_func_array(array($this, $method), $e->getParam('__method_arguments'));
+        $params = $e->getParam('__method_arguments') ? $e->getParam('__method_arguments') : [];
+        $actionResponse = call_user_func_array([$this, $method], $params);
         $e->setResult($actionResponse);
 
         return $actionResponse;

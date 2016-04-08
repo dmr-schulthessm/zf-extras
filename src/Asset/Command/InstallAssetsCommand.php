@@ -49,14 +49,16 @@ class InstallAssetsCommand extends AbstractServiceLocatorAwareCommand
                 mkdir($config->get('assets.install_dir'), 0755, true);
             }
             
-            $moduleNameAlias = strtolower(array_shift(explode('\\', get_class($module))));
+            $parts = explode('\\', get_class($module));
+            $moduleNameAlias = strtolower(array_shift($parts));
             $assetsTargetDir = sprintf('%s/%s', $config->get('assets.install_dir'), $moduleNameAlias);
             
             if (!is_writable($config->get('assets.install_dir'))) {
                 throw new Exception('Cannot install module assets. Target dir is not writeable: ' . $config->get('assets.install_dir'));
             }
             
-            $output->writeln('Installing assets for <info>' . array_shift(explode('\\', get_class($module))) . '</info> as <comment>symlink</comment>.');
+            $parts = explode('\\', get_class($module));
+            $output->writeln('Installing assets for <info>' . array_shift($parts) . '</info> as <comment>symlink</comment>.');
             
             $assetManager->install($moduleAssetsDir, $assetsTargetDir);
         }

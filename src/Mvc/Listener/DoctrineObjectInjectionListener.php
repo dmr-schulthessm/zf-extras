@@ -77,6 +77,7 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate implemen
 
     public function onDispatch(MvcEvent $event)
     {
+        die(__METHOD__);
         /* @var $routeMatch RouteMatch */
         $routeMatch = $event->getRouteMatch();
         

@@ -3,7 +3,6 @@
 use ZfExtra\Asset\AssetManager;
 use ZfExtra\Asset\Command\InstallAssetsCommand;
 use ZfExtra\Asset\Service\AssetManagerFactory;
-use ZfExtra\Asset\View\Helper\Image;
 
 return [
     'assets' => [
