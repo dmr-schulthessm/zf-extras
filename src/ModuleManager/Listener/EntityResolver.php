@@ -35,10 +35,15 @@ class EntityResolver extends AbstractListenerAggregate
         $modules = $event->getTarget()->getLoadedModules();
         foreach ($modules as $module) {
             $ref = new ReflectionClass($module);
-            $dir = dirname($ref->getFileName()) . '/src/Entity';
-            if (!is_dir($dir)) {
+            $dir1 = dirname($ref->getFileName()) . '/Entity';
+            $dir2 = dirname($ref->getFileName()) . '/src/Entity';
+            
+            $dirs = array_filter([$dir1, $dir2], 'is_dir');
+            if (count($dirs) == 0) {
                 continue;
             }
+            
+            $dir = current($dirs);
 
             $parts = explode('\\', get_class($module));
             $moduleName = array_shift($parts);

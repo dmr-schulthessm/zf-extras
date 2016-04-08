@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfExtra\Entity;
+namespace ZfExtra\Doctrine\ORM;
 
 use Doctrine\ORM\EntityRepository as DoctrineEntityRepository;
 use Doctrine\ORM\QueryBuilder;

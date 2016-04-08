@@ -1,7 +1,7 @@
 <?php
 
 use Doctrine\DBAL\Driver\Mysqli\Driver;
-use ZfExtra\Controller\Plugin\Orm;
+use ZfExtra\Mvc\Controller\Plugin\Orm;
 
 return [
     'controller_plugins' => [
