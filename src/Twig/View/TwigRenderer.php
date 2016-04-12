@@ -131,7 +131,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
             }
         }
         $template = $this->resolver->resolve($model->getTemplate(), $this);
-        return $template->render($model->getVariables());
+        return $template->render((array) $model->getVariables());
     }
 
     /**

@@ -17,6 +17,21 @@ class EntityResolver extends AbstractListenerAggregate
 {
 
     /**
+     *
+     * @var array
+     */
+    protected $ignoreModules = [];
+    
+    /**
+     * 
+     * @param array $ignoredModules
+     */
+    public function __construct(array $ignoredModules = [])
+    {
+        $this->ignoreModules = $ignoredModules;
+    }
+    
+    /**
      * 
      * @param EventManagerInterface $events
      */
@@ -47,6 +62,9 @@ class EntityResolver extends AbstractListenerAggregate
 
             $parts = explode('\\', get_class($module));
             $moduleName = array_shift($parts);
+            if (in_array($moduleName, $this->ignoreModules)) {
+                continue;
+            }
             $driverName = strtolower($moduleName) . '_entities';
 
             $config['doctrine']['driver']['orm_default']['drivers'][sprintf('%s\Entity', $moduleName)] = $driverName;

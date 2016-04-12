@@ -6,7 +6,6 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use ZfExtra\Assertion\AssertionManager;
 
 /**
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
@@ -22,7 +21,7 @@ class AssertionListener extends AbstractListenerAggregate
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-//        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 1000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 1000);
     }
 
     /**
@@ -31,13 +30,13 @@ class AssertionListener extends AbstractListenerAggregate
      */
     public function onDispatch(MvcEvent $event)
     {
-        $assertionManager = $this->serviceLocator->get(AssertionManager::class);
-        var_dump($assertionManager);die;
-        $assertConfig = $assertionManager->findConfig($event->getRouteMatch()->getParam('controller'), $event->getRouteMatch()->getParam('action'));
+        $assertionManager = $this->serviceLocator->get('AssertionManager');
+        $routeMatch = $event->getRouteMatch();
+        $assertConfig = $assertionManager->findConfig($routeMatch->getParam('controller'), $routeMatch->getParam('action'));
         foreach ($assertConfig as $config) {
             $assert = $assertionManager->get($config['assert']);
             if (!$assert->test($event, $config['options'])) {
-                return call_user_func_array([$assert, 'onFail'], array($event));
+                return call_user_func_array([$assert, 'onFail'], [$event]);
             }
         }
     }

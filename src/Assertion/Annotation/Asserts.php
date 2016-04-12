@@ -7,14 +7,14 @@ use Zend\Code\Annotation\AnnotationInterface;
 /**
  * @Annotation
  */
-class Assert implements AnnotationInterface
+class Asserts implements AnnotationInterface
 {
 
     /**
      *
      * @var string
      */
-    public $name;
+    public $names;
 
     /**
      *
@@ -35,9 +35,9 @@ class Assert implements AnnotationInterface
      * 
      * @return string
      */
-    public function getName()
+    public function getNames()
     {
-        return $this->name;
+        return array_map('trim', explode(',', $this->names));
     }
 
     /**

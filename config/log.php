@@ -9,8 +9,7 @@ use ZfExtra\Log\Factory\ApplicationLoggerStreamWriterFactory;
 use ZfExtra\Log\Factory\LogEventListenerFactory;
 
 return [
-    'logger' =>
-    [
+    'logger' => [
         'enable' => true,
         'service' => 'ZfExtra\Log\ApplicationLogger',
         'formatter' => 'ZfExtra\Log\ApplicationLoggerFormatter',

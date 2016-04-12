@@ -2,6 +2,7 @@
 
 use ZfExtra\Assertion\Annotation\Assert;
 use ZfExtra\Assertion\Annotation\Assertion;
+use ZfExtra\Assertion\Annotation\Asserts;
 use ZfExtra\Assertion\Factory\AssertionListenerFactory;
 use ZfExtra\Assertion\Listener\AnnotationListener;
 use ZfExtra\Assertion\Listener\AssertionListener;
@@ -10,7 +11,8 @@ return [
     'zf_annotation' => [
         'annotations' => [
             Assertion::class,
-            Assert::class
+            Assert::class,
+            Asserts::class,
         ],
         'event_listeners' => [
             AnnotationListener::class

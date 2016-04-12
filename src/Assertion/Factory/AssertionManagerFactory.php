@@ -13,7 +13,7 @@ class AssertionManagerFactory implements FactoryInterface
     {
         $instance = new AssertionManager;
         $instance->setServiceLocator($serviceLocator);
-        return $serviceLocator;
+        return $instance;
     }
 
 }

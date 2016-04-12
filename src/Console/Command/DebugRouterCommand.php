@@ -13,23 +13,23 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
     protected function configure()
     {
         $this
-                ->setName('debug:router')
-                ->setDescription('List all routes.')
-                ->addOption('dump', 'd', InputOption::VALUE_NONE, 'Dump configured array')
+            ->setName('debug:router')
+            ->setDescription('List all routes.')
+            ->addOption('dump', 'd', InputOption::VALUE_NONE, 'Dump configured array')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $routes = $this->serviceLocator->getServiceLocator()->get('config.helper')->get('router.routes');
-        
+
         $doDump = $input->getOption('dump');
         if ($doDump) {
             print_r($routes);
             return;
         }
-        
-        
+
+
         $data = $this->fetch($routes);
 
         $table = new Table($output);
@@ -61,13 +61,10 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
 
             if (isset($route['child_routes']) && count($route['child_routes']) > 0) {
                 $data = array_merge(
-                        $data, 
-                        $this->fetch(
-                                $route['child_routes'], 
-                                ltrim($parent . '/' . $name, '/'), 
-                                $parentPath . $route['options']['route']
-                            )
-                    );
+                    $data, $this->fetch(
+                        $route['child_routes'], ltrim($parent . '/' . $name, '/'), $parentPath . $route['options']['route']
+                    )
+                );
             }
         }
         return $data;
