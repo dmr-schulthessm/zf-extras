@@ -3,6 +3,7 @@
 namespace ZfExtra\Assertion;
 
 use Zend\ServiceManager\AbstractPluginManager;
+use ZfExtra\Config\ConfigHelper;
 
 class AssertionManager extends AbstractPluginManager
 {
@@ -44,7 +45,8 @@ class AssertionManager extends AbstractPluginManager
      */
     public function findConfig($controller, $action)
     {
-        $config = $this->getServiceLocator()->get('config.helper');
+        $config = $this->getServiceLocator()->get(ConfigHelper::class);
+//        var_dump(sprintf('asserts.%s.%s', $controller, strtolower($action)));
         return $config->get(sprintf('asserts.%s.%s', $controller, $action), array());
     }
 }

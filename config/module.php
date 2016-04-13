@@ -8,11 +8,9 @@ use ZfExtra\Mvc\ApplicationFactory;
 $config = [
     'service_manager' => [
         'factories' => [
-            Mailer::class => MailerFactory::class,
             Application::class => ApplicationFactory::class,
         ],
         'aliases' => [
-            'mailer' => Mailer::class,
             'Application' => Application::class
         ],
     ],

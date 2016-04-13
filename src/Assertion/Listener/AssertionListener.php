@@ -4,6 +4,7 @@ namespace ZfExtra\Assertion\Listener;
 
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Filter\Word\DashToCamelCase;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -30,10 +31,14 @@ class AssertionListener extends AbstractListenerAggregate
      */
     public function onDispatch(MvcEvent $event)
     {
+        $filter = new DashToCamelCase;
         $assertionManager = $this->serviceLocator->get('AssertionManager');
         $routeMatch = $event->getRouteMatch();
-        $assertConfig = $assertionManager->findConfig($routeMatch->getParam('controller'), $routeMatch->getParam('action'));
-        foreach ($assertConfig as $config) {
+        $controller = $routeMatch->getParam('controller');
+        $action = lcfirst($filter->filter($routeMatch->getParam('action')));
+        $assertsConfig = $assertionManager->findConfig($controller, $action);
+
+        foreach ($assertsConfig as $config) {
             $assert = $assertionManager->get($config['assert']);
             if (!$assert->test($event, $config['options'])) {
                 return call_user_func_array([$assert, 'onFail'], [$event]);

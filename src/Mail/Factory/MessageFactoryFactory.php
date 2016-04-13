@@ -1,27 +1,30 @@
 <?php
 
-namespace ZfExtra\Mail;
+namespace ZfExtra\Mail\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfExtra\Config\ConfigHelper;
+use ZfExtra\Mail\Mailer;
+use ZfExtra\Mail\MessageFactory;
 
 /**
- * Mailer factory.
  * 
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
-class MailerFactory implements FactoryInterface
+class MessageFactoryFactory implements FactoryInterface
 {
 
     /**
      * Factory.
      * 
      * @param ServiceLocatorInterface $serviceLocator
-     * @return \ZfExtra\Mail\Mailer
+     * @return Mailer
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Mailer($serviceLocator->get('config_helper')->get('mailer'));
+        $config = $serviceLocator->get(ConfigHelper::class)->get('mailer.messages');
+        return new MessageFactory($config);
     }
 
 }

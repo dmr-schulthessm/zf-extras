@@ -4,24 +4,23 @@ namespace ZfExtra\Mail;
 
 use Exception;
 use Zend\Mail\Transport\TransportInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use ZfExtra\EventManager\EventsAwareInterface;
-use ZfExtra\EventManager\EventsAwareTrait;
 
 /**
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
  */
-class Mailer implements ServiceLocatorAwareInterface, EventsAwareInterface
+class Mailer
 {
-
-    use ServiceLocatorAwareTrait;
-    use EventsAwareTrait;
 
     /**
      * @var TransportInterface
      */
     protected $transport;
+
+    /**
+     *
+     * @var MessageFactory
+     */
+    protected $messageFactory;
 
     /**
      * 
@@ -47,7 +46,7 @@ class Mailer implements ServiceLocatorAwareInterface, EventsAwareInterface
         if (!$this->transport instanceof TransportInterface) {
             throw new Exception('Transport must implement Zend\Mail\Transport\TransportInterface');
         }
-        
+
         if (method_exists($this->transport, 'getOptions')) {
             $transportOptions = $this->transport->getOptions();
             $transportOptions->setFromArray($options['transport']['options']);
@@ -62,11 +61,9 @@ class Mailer implements ServiceLocatorAwareInterface, EventsAwareInterface
     public function send(Message $message)
     {
         $mailMessage = MessageConverter::convert($message);
-        $this->events->trigger(new MessageEvent(MessageEvent::EVENT_PRE_SEND, $message, ['mail_message' => $mailMessage]));
         $this->transport->send($mailMessage);
-        $this->events->trigger(new MessageEvent(MessageEvent::EVENT_POST_SEND, $message, ['mail_message' => $mailMessage]));
     }
-    
+
     /**
      * 
      * @return TransportInterface
@@ -74,6 +71,26 @@ class Mailer implements ServiceLocatorAwareInterface, EventsAwareInterface
     public function getTransport()
     {
         return $this->transport;
+    }
+
+    /**
+     * 
+     * @return MessageFactory
+     */
+    public function getMessageFactory()
+    {
+        return $this->messageFactory;
+    }
+
+    /**
+     * 
+     * @param MessageFactory $messageFactory
+     * @return Mailer
+     */
+    public function setMessageFactory(MessageFactory $messageFactory)
+    {
+        $this->messageFactory = $messageFactory;
+        return $this;
     }
 
 }
