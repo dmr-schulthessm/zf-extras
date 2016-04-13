@@ -8,6 +8,7 @@ use Twig_TemplateInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Log\Logger;
 use Zend\View\Exception\DomainException;
+use Zend\View\Helper\AbstractHelper;
 use Zend\View\Model\ModelInterface;
 use Zend\View\Model\ViewModel;
 use Zend\View\Renderer\PhpRenderer;
@@ -20,13 +21,23 @@ use ZfExtra\Log\LogEvent;
 
 class TwigRenderer implements RendererInterface, TreeRendererInterface, EventManagerAwareInterface
 {
-    
+
     use \Zend\EventManager\EventManagerAwareTrait;
 
     const INHERITANCE_ZEND = 'zend';
     const INHERITANCE_EXTEND = 'extend';
-    
+
     protected $eventIdentifier = LogEventListener::LOG_PROVIDER;
+
+    /**
+     * @var HelperPluginManager
+     */
+    protected $helperPluginManager;
+
+    /**
+     * @var array Cache for the plugin call
+     */
+    private $__pluginCache = array();
 
     /**
      *
@@ -57,7 +68,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
      * @var TwigResolver
      */
     protected $resolver;
-    
+
     /**
      *
      * @var PhpRenderer
@@ -82,7 +93,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
         Twig_Loader_Chain $loader, 
         Twig_Environment $enviroment, 
         TwigResolver $resolver, 
-        PhpRenderer $fallbackRenderer = null,
+        PhpRenderer $fallbackRenderer = null, 
         $layoutInheritance = self::INHERITANCE_ZEND
     )
     {
@@ -103,6 +114,12 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
         return $this->environment;
     }
 
+    /**
+     * 
+     * @param ModelInterface|string $nameOrModel
+     * @param mixed $values
+     * @return string
+     */
     public function render($nameOrModel, $values = null)
     {
         if ($this->layoutInheritance == self::INHERITANCE_EXTEND) {
@@ -149,7 +166,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
             $nameOrModel = $model->getTemplate();
             if (empty($nameOrModel)) {
                 throw new DomainException(sprintf(
-                        '%s: received View Model argument, but template is empty', __METHOD__
+                    '%s: received View Model argument, but template is empty', __METHOD__
                 ));
             }
             $values = (array) $model->getVariables();
@@ -171,7 +188,7 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
                 } catch (\Exception $e) {
                     
                 }
-                
+
                 /** @var ViewModel $child */
                 if ($isTwigTemplate) {
                     /* @var $template Twig_TemplateInterface */
@@ -226,6 +243,57 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
     public function canRenderTrees()
     {
         return $this->canRenderTrees;
+    }
+
+    /**
+     * @param HelperPluginManager $helperPluginManager
+     * @return TwigRenderer
+     */
+    public function setHelperPluginManager(HelperPluginManager $helperPluginManager)
+    {
+        $helperPluginManager->setRenderer($this);
+        $this->helperPluginManager = $helperPluginManager;
+        return $this;
+    }
+
+    /**
+     * Overloading: proxy to helpers
+     *
+     * Proxies to the attached plugin manager to retrieve, return, and potentially
+     * execute helpers.
+     *
+     * * If the helper does not define __invoke, it will be returned
+     * * If the helper does define __invoke, it will be called as a functor
+     *
+     * @param  string $method
+     * @param  array $argv
+     * @return mixed
+     */
+    public function __call($method, $argv)
+    {
+        die(__METHOD__);
+        if (!isset($this->__pluginCache[$method])) {
+            $this->__pluginCache[$method] = $this->plugin($method);
+        }
+        if (is_callable($this->__pluginCache[$method])) {
+            return call_user_func_array($this->__pluginCache[$method], $argv);
+        }
+        return $this->__pluginCache[$method];
+    }
+
+    /**
+     * Get plugin instance, proxy to HelperPluginManager::get
+     *
+     * @param  string     $name Name of plugin to return
+     * @param  null|array $options Options to pass to plugin constructor (if not already instantiated)
+     * @return AbstractHelper
+     */
+    public function plugin($name, array $options = null)
+    {
+        var_dump($name);
+        return $this->getHelperPluginManager()
+                ->setRenderer($this)
+                ->get($name, $options);
     }
 
 }

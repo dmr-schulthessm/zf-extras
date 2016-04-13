@@ -1,5 +1,7 @@
 <?php
 
+use Zend\Navigation\View\HelperConfig as NavHelperConfig;
+use Zend\Form\View\HelperConfig as FormHelperConfig;
 use ZfExtra\Twig\DirectRenderer;
 use ZfExtra\Twig\Loader\PathStackLoader;
 use ZfExtra\Twig\Service\LoaderFactory;
@@ -9,6 +11,8 @@ use ZfExtra\Twig\Service\TwigDirectRendererFactory;
 use ZfExtra\Twig\Service\TwigFactory;
 use ZfExtra\Twig\Service\TwigResolverFactory;
 use ZfExtra\Twig\Service\TwigStrategyFactory;
+use ZfExtra\Twig\View\HelperPluginManager;
+use ZfExtra\Twig\View\HelperPluginManagerFactory;
 use ZfExtra\Twig\View\TwigRenderer;
 use ZfExtra\Twig\View\TwigResolver;
 use ZfExtra\Twig\View\TwigStrategy;
@@ -23,6 +27,7 @@ return [
             PathStackLoader::class => PathStackLoaderFactory::class,
             TwigStrategy::class => TwigStrategyFactory::class,
             DirectRenderer::class => TwigDirectRendererFactory::class,
+            HelperPluginManager::class => HelperPluginManagerFactory::class,
         ],
         'aliases' => [
             'twig' => TwigRenderer::class,
@@ -44,5 +49,13 @@ return [
             PathStackLoader::class
         ],
         'extensions' => [],
+        'view_helpers' => [
+        ],
+        'helper_manager' => array(
+            'configs' => array(
+                NavHelperConfig::class,
+                FormHelperConfig::class,
+            )
+        )
     ],
 ];
