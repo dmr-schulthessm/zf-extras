@@ -33,13 +33,13 @@ class DebugConfigCommand extends AbstractServiceLocatorAwareCommand
         $config = $this->serviceLocator->getServiceLocator()->get('config.helper');
 
         $path = $input->getOption('path');
-        $dumper = new \Symfony\Component\Yaml\Dumper;
         if ($path) {
             $data = $config->get($path);
         } else {
             $data = $config->getConfig();
         }
-        echo $dumper->dump($data, 10, 1);
+        
+        echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
 }
