@@ -16,7 +16,7 @@ class DebugServiceCommand extends AbstractServiceLocatorAwareCommand
     protected function configure()
     {
         $this
-                ->setName('debug:services')
+                ->setName('services')
                 ->addOption('manager', 'm', InputOption::VALUE_OPTIONAL, 'From specific service manager', null)
                 ->setDescription('List all configured services.')
         ;

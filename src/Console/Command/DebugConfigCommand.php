@@ -10,26 +10,36 @@ use ZfExtra\Config\ConfigHelper;
 class DebugConfigCommand extends AbstractServiceLocatorAwareCommand
 {
 
+    /**
+     * 
+     */
     protected function configure()
     {
         $this
-                ->setName('debug:config')
-                ->setDescription('Dump config.')
-                ->addOption('path', 'p', InputOption::VALUE_OPTIONAL, 'Use a path to key.')
+            ->setName('config')
+            ->setDescription('Dump config.')
+            ->addOption('path', 'p', InputOption::VALUE_OPTIONAL, 'Use a path to key.')
         ;
     }
 
+    /**
+     * 
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /* @var $config ConfigHelper */
         $config = $this->serviceLocator->getServiceLocator()->get('config.helper');
 
         $path = $input->getOption('path');
+        $dumper = new \Symfony\Component\Yaml\Dumper;
         if ($path) {
-            return print_r($config->get($path));
+            $data = $config->get($path);
         } else {
-            return print_r($config->getConfig());
+            $data = $config->getConfig();
         }
+        echo $dumper->dump($data, 10, 1);
     }
 
 }

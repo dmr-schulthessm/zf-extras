@@ -13,7 +13,7 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
     protected function configure()
     {
         $this
-            ->setName('debug:router')
+            ->setName('router')
             ->setDescription('List all routes.')
             ->addOption('dump', 'd', InputOption::VALUE_NONE, 'Dump configured array')
         ;
