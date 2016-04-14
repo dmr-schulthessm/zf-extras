@@ -1,8 +1,6 @@
 <?php
 
 use Zend\Mvc\Application;
-use ZfExtra\Mail\Mailer;
-use ZfExtra\Mail\MailerFactory;
 use ZfExtra\Mvc\ApplicationFactory;
 
 $config = [
