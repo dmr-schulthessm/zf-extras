@@ -11,8 +11,6 @@ use Zend\View\HelperPluginManager as ZendHelperPluginManager;
 class HelperPluginManager extends ZendHelperPluginManager
 {
 
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    
 //    /**
 //     * Default set of helpers factories
 //     *
