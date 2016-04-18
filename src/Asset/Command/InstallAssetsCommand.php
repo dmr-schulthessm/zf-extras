@@ -39,7 +39,11 @@ class InstallAssetsCommand extends AbstractServiceLocatorAwareCommand
         
         foreach ($modules as $module) {
             $ref = new ReflectionClass($module);
-            $moduleAssetsDir = dirname($ref->getFileName()) . DIRECTORY_SEPARATOR . $config->get('assets.module_assets_dir');
+            if (method_exists($module, 'getAssetDir')) {
+                $moduleAssetsDir = call_user_func_array([$module, 'getAssetDir'], []);
+            } else {
+                $moduleAssetsDir = dirname($ref->getFileName()) . DIRECTORY_SEPARATOR . $config->get('assets.module_assets_dir');
+            }
             
             if (!is_dir($moduleAssetsDir)) {
                 continue;

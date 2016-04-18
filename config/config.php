@@ -3,13 +3,17 @@
 use ZfExtra\Config\ConfigHelper;
 use ZfExtra\Config\ConfigHelperFactory;
 use ZfExtra\Config\Controller\Plugin\Config as ConfigPlugin;
+use ZfExtra\Config\Factory\ConfigPluginFactory;
 use ZfExtra\Config\View\Helper\Config as ConfigViewHelper;
 
 return [
     'controller_plugins' => [
-        'invokables' => [
-            'config' => ConfigPlugin::class,
+        'factories' => [
+            ConfigPlugin::class => ConfigPluginFactory::class,
         ],
+        'aliases' => [
+            'config' => ConfigPlugin::class,
+        ]
     ],
     'view_helpers' => [
         'invokables' => [

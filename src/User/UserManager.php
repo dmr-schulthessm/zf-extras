@@ -4,8 +4,7 @@ namespace ZfExtra\User;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use ZfExtra\Entity\Entity;
-use ZfExtra\Support\ArrayToClassPropertiesTrait;
+use Exception;
 
 /**
  *
@@ -14,20 +13,18 @@ use ZfExtra\Support\ArrayToClassPropertiesTrait;
 class UserManager
 {
 
-    use ArrayToClassPropertiesTrait;
-
     /**
      *
      * @var EntityManager
      */
     protected $entityManager;
-    
+
     /**
      *
      * @var string
      */
     protected $entityClass;
-    
+
     /**
      *
      * @var EntityRepository
@@ -55,13 +52,17 @@ class UserManager
     {
         $entity = new $this->entityClass;
         if (null !== $data) {
-            if ($entity instanceof Entity) {
-                $entity->import($data, true);
+            if ($entity instanceof ArrayToClassPropertiesProviderInterface) {
+                $entity->arrayToClassProperties($data, true);
+            } elseif (method_exists($entity, 'exchangeArray')) {
+                $entity->exchangeArray($data);
             } else {
-                $this->arrayToClassProperties($data, true);
+                throw new Exception(sprintf(
+                    'Entity "%s" must implement interface "%s" or method "exchangeArray".', get_class($entity), ArrayToClassPropertiesProviderInterface::class
+                ));
             }
         }
-        
+
         if ($persist) {
             $this->entityManager->persist($entity);
         }
@@ -76,7 +77,7 @@ class UserManager
     {
         $this->entityManager->flush($user);
     }
-    
+
     /**
      * 
      * @param int|UserInterface $userOrId
@@ -86,7 +87,7 @@ class UserManager
     {
         return (bool) $this->repo->find($userOrId);
     }
-    
+
     /**
      * 
      * @param array $criteria
@@ -96,9 +97,10 @@ class UserManager
     {
         return (bool) $this->repo->findOneBy($criteria);
     }
-    
+
     public function __call($name, $arguments)
     {
         return call_user_func_array([$this->repo, $name], $arguments);
     }
+
 }

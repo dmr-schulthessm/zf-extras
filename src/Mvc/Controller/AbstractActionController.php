@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
+use Zend\Form\FormElementManager;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
@@ -15,7 +16,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\Session\ManagerInterface;
 use Zend\View\Model\ViewModel;
-use ZfExtra\Mvc\Controller\Plugin\Config;
+use ZfExtra\Config\Controller\Plugin\Config;
 use ZfExtra\Entity\AbstractEntity;
 use ZfExtra\Mail\Mailer;
 

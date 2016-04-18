@@ -20,6 +20,21 @@ class Config extends AbstractPlugin
 {
 
     /**
+     *
+     * @var ConfigHelper
+     */
+    protected $configHelper;
+
+    /**
+     * 
+     * @param ConfigHelper $configHelper
+     */
+    public function __construct(ConfigHelper $configHelper)
+    {
+        $this->configHelper = $configHelper;
+    }
+
+    /**
      * Returns value from config by $path.
      * 
      * @param string $path
@@ -45,7 +60,7 @@ class Config extends AbstractPlugin
      */
     public function getConfigHelper()
     {
-        return $this->getController()->getServiceLocator()->get('config_helper');
+        return $this->configHelper;
     }
 
     /**
@@ -59,7 +74,7 @@ class Config extends AbstractPlugin
     {
         if (!method_exists($this->getConfigHelper(), $name)) {
             throw new MethodNotFoundException(sprintf(
-                    'The method "%s" has not been found neither in "%s" nor in "%s".', $name, self::class, ConfigHelper::class
+                'The method "%s" has not been found neither in "%s" nor in "%s".', $name, self::class, ConfigHelper::class
             ));
         }
 

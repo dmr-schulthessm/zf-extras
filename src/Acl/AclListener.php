@@ -90,6 +90,8 @@ class AclListener extends AbstractListenerAggregate
                     if (!$handler) {
                         return $this->triggerUnauthorizedError($app, $event);
                     } else {
+                        $event->setParam('requested_resource', $resource);
+                        $event->setParam('requested_action', $action);
                         $event->getRouteMatch()->setParam('controller', $handler['controller']);
                         $event->getRouteMatch()->setParam('action', $handler['action']);
                         return false;

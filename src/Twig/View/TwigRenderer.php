@@ -3,7 +3,9 @@
 namespace ZfExtra\Twig\View;
 
 use Twig_Environment;
+use Twig_Error_Loader;
 use Twig_Loader_Chain;
+use Twig_Template;
 use Twig_TemplateInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Log\Logger;
@@ -228,7 +230,12 @@ class TwigRenderer implements RendererInterface, TreeRendererInterface, EventMan
      */
     public function canRender($name)
     {
-        return true;
+        /* @var $path Twig_Template */
+        try {
+            return $this->resolver->resolve($name) instanceof Twig_Template;
+        } catch (Twig_Error_Loader $ex) {
+            return false;
+        }
     }
 
     /**

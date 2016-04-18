@@ -72,8 +72,8 @@ class Auth
     public function logout()
     {
         $this->authService->clearIdentity();
-        session_destroy();
         session_regenerate_id();
+        session_destroy();
     }
     
     /**

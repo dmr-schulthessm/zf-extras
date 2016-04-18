@@ -27,13 +27,13 @@ trait ArrayToClassPropertiesTrait
                 $property = $mapping[$property];
             }
             
-            $method = 'set' . $property;
+            $method = 'set' . ucfirst($property);
             if (method_exists($this, $method)) {
                 call_user_func_array([$this, $method], [$value]);
             } elseif (property_exists($this, $property)) {
                 $this->$property = $value;
             } elseif ($strict) {
-                throw new Exception(sprintf('Import error: cannot find method "%s" or property "%s"', $method, $property));
+                throw new Exception(sprintf('Import error: cannot find method "%s" or property "%s" in "%s"', $method, $property, get_class($this)));
             }
         }
     }

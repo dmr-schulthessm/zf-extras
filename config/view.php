@@ -2,6 +2,7 @@
 
 use ZfExtra\View\DirectRenderer;
 use ZfExtra\View\Factory\DirectRendererFactory;
+use ZfExtra\View\LayoutSwitcherListener;
 
 return [
     'view_layouts' => [
@@ -22,6 +23,9 @@ return [
         'aliases' => [],
     ],
     'service_manager' => [
+        'invokables' => [
+            LayoutSwitcherListener::class => LayoutSwitcherListener::class
+        ],
         'factories' => [
             DirectRenderer::class => DirectRendererFactory::class,
         ],
