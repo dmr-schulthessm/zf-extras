@@ -5,6 +5,7 @@ namespace ZfExtra\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Exception;
+use ZfExtra\Support\ArrayToClassPropertiesProviderInterface;
 
 /**
  *
