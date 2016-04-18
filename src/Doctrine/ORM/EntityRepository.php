@@ -56,6 +56,7 @@ class EntityRepository extends DoctrineEntityRepository
         foreach ($criteria as $column => $value) {
             $qb->andWhere($qb->expr()->eq($alias . '.' . $column, ':' . $column));
         }
+        
         $qb->setParameters($criteria);
         return $qb->getQuery()->execute();
     }
