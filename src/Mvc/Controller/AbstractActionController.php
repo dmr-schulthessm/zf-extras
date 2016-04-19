@@ -4,7 +4,6 @@ namespace ZfExtra\Mvc\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use ZfExtra\Doctrine\ORM\EntityRepository as ZfExtraEntityRepository;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\Form\FormElementManager;
@@ -18,8 +17,10 @@ use Zend\Session\Container;
 use Zend\Session\ManagerInterface;
 use Zend\View\Model\ViewModel;
 use ZfExtra\Config\Controller\Plugin\Config;
+use ZfExtra\Doctrine\ORM\EntityRepository as ZfExtraEntityRepository;
 use ZfExtra\Entity\AbstractEntity;
 use ZfExtra\Mail\Mailer;
+use ZfExtra\Mvc\Controller\Plugin\Orm;
 
 /**
  * Base action controller.
@@ -30,7 +31,7 @@ use ZfExtra\Mail\Mailer;
  * @method Container session(string $containerName = 'default', ManagerInterface $manager = null) Returns a session container.
  * @method Mailer mailer() Send email message or get a mailer instance.
  * @method EventManager events() Return app's event manager.
- * @method EntityRepository|EntityManager|AbstractEntity|Plugin\Orm|ZfExtraEntityRepository orm(string $repositoryClass = null, string $entityManager = 'doctrine.entitymanager.orm_default') Get doctrine entity manager.
+ * @method EntityRepository|EntityManager|AbstractEntity|Orm|ZfExtraEntityRepository orm(string $repositoryClass = null, string $entityManager = 'doctrine.entitymanager.orm_default') Get doctrine entity manager.
  * @method Form|FormElementManager form(string $name = null) Returns form instance configured with FormElementManager.
  * @method string translate($message, $textDomain = 'default', $locale = null) Translate a string
  * 

@@ -18,7 +18,6 @@ class MessageConverter
     {
         $mailMessage = new ZendMessage;
         
-        
         $mailMessage->setSubject($message->getSubject());
         $mailMessage->setFrom($message->getFrom());
         $mailMessage->setTo($message->getTo());

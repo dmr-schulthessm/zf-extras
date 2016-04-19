@@ -59,7 +59,7 @@ class AclListener extends AbstractListenerAggregate
         $routeMatch = $event->getRouteMatch();
         $resource = $routeMatch->getParam('controller');
         $action = $routeMatch->getParam('action');
-
+        
         if ($acl->hasResource($resource)) {
             if (!$acl->isAllowed($this->getRole($event), $resource, $action)) {
 

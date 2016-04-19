@@ -280,6 +280,8 @@ class Message
         if ($this->text) {
             return Mime::TYPE_TEXT;
         }
+        
+        return Mime::TYPE_TEXT;
     }
 
     /**
