@@ -45,6 +45,9 @@ class TranslationResolver extends AbstractListenerAggregate
             foreach ($iterator as $file) {
                 if ($file->isFile()) {
                     list($domain, $locale, $type) = explode('.', $file->getFilename());
+                    if ($type === 'php') {
+                        $type = 'phparray';
+                    }
                     $config['translator']['translation_files'][] = array(
                         'type' => $type,
                         'filename' => $file->getPathname(),
