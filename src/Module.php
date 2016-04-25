@@ -4,20 +4,10 @@ namespace ZfExtra;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Mvc\MvcEvent;
 use ZfExtra\Config\Config;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
-
-    public function onBootstrap(MvcEvent $event)
-    {
-        $serviceManager = $event->getApplication()->getServiceManager();
-        $translatorCache = $serviceManager->get('mvctranslator')->getCache();
-        if ($translatorCache) {
-            $translatorCache->setCaching(!DEBUG);
-        }
-    }
 
     /**
      * 

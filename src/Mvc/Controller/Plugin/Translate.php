@@ -4,6 +4,7 @@ namespace ZfExtra\Mvc\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Mvc\Controller\PluginManager;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -27,9 +28,22 @@ class Translate extends AbstractPlugin implements ServiceLocatorAwareInterface
      * @param string $locale
      * @return string
      */
-    public function __invoke($message, $textDomain = 'default', $locale = null)
+    public function __invoke($message = null, $textDomain = 'default', $locale = null)
     {
-        return $this->serviceLocator->getServiceLocator()->get('mvctranslator')->translate($message, $textDomain, $locale);
+        if (func_num_args() === 0) {
+            return $this->getTranslator();
+        } else {
+            return $this->getTranslator()->translate($message, $textDomain, $locale);
+        }
+    }
+    
+    /**
+     * 
+     * @return Translator
+     */
+    public function getTranslator()
+    {
+        return $this->serviceLocator->getServiceLocator()->get('mvctranslator');
     }
 
 }
