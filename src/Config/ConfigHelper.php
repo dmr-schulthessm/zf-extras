@@ -2,9 +2,7 @@
 
 namespace ZfExtra\Config;
 
-use Exception;
-use ZfExtra\Exception\MissingConfigParamException;
-use ZfExtra\Exception\MissingVariableException;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Config helper with handy utils for accessing config variables.
@@ -13,8 +11,9 @@ use ZfExtra\Exception\MissingVariableException;
  */
 class ConfigHelper
 {
+
     use ValueFinderTrait;
-    
+
     /**
      * Application config.
      * 
@@ -53,6 +52,15 @@ class ConfigHelper
     }
 
     /**
+     * 
+     * @param array $config
+     */
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Returns merged configs of modules and application.
      * 
      * @see config/application.yml
@@ -63,40 +71,9 @@ class ConfigHelper
         return $this->config;
     }
 
-    /**
-     * 
-     * @param string $name
-     * @return mixed
-     * @throws Exception
-     */
-    public function getVariable($name)
+    public function mergeConfig(array $config)
     {
-        $varName = sprintf('%s.%s', $this->variablesKey, $name);
-        try {
-            return $this->get($varName, null, true);
-        } catch (MissingConfigParamException $e) {
-            $ex = new MissingVariableException('Variable "' . $varName . '" not found in variables.', 0, $e);
-            throw $ex;
-        }
-    }
-
-    /**
-     * 
-     * @param string $name
-     * @return bool
-     */
-    public function hasVariable($name)
-    {
-        return isset($this->config[$this->variablesKey][$name]);
-    }
-
-    /**
-     * 
-     * @return array
-     */
-    public function getVariables()
-    {
-        return $this->config[$this->variablesKey];
+        $this->config = ArrayUtils::merge($this->config, $config, true);
     }
 
 }
