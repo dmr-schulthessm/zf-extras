@@ -13,6 +13,7 @@ return [
             'options' => [],
         ],
         'messages' => [],
+        'plugins' => []
     ],
     'service_manager' => [
         'factories' => [

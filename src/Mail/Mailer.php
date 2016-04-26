@@ -23,6 +23,13 @@ class Mailer
     protected $messageFactory;
 
     /**
+     *
+     * @var PluginInterface[] 
+     */
+    protected $plugins = [];
+
+
+    /**
      * 
      * @param array $options
      */
@@ -61,7 +68,16 @@ class Mailer
     public function send(Message $message)
     {
         $mailMessage = MessageConverter::convert($message);
+        
+        foreach ($this->plugins as $plugin) {
+            $plugin->preSend($mailMessage);
+        }
+        
         $this->transport->send($mailMessage);
+        
+        foreach ($this->plugins as $plugin) {
+            $plugin->preSend($mailMessage);
+        }
     }
 
     /**
@@ -91,6 +107,15 @@ class Mailer
     {
         $this->messageFactory = $messageFactory;
         return $this;
+    }
+    
+    /**
+     * 
+     * @param PluginInterface $plugin
+     */
+    public function addPlugin(PluginInterface $plugin)
+    {
+        $this->plugins[] = $plugin;
     }
 
 }

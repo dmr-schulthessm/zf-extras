@@ -26,6 +26,17 @@ class MailerFactory implements FactoryInterface
     {
         $mailer = new Mailer($serviceLocator->get(ConfigHelper::class)->get('mailer'));
         $mailer->setMessageFactory($serviceLocator->get(MessageFactory::class));
+        
+        $plugins = $serviceLocator->get(ConfigHelper::class)->get('mailer.plugins');
+        foreach ($plugins as $pluginClass) {
+            if ($serviceLocator->has($pluginClass)) {
+                $plugin = $serviceLocator->get($pluginClass);
+            } else {
+                $plugin = new $pluginClass;
+            }
+            $mailer->addPlugin($plugin);
+        }
+        
         return $mailer;
     }
 
