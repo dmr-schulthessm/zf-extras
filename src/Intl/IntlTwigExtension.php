@@ -42,7 +42,7 @@ class IntlTwigExtension extends Twig_Extension
 
     public function getName()
     {
-        return 'intl';
+        return 'zfe-intl';
     }
 
     public function trans($message, array $placeholders = [], $textDomain = 'default', $locale = null)
