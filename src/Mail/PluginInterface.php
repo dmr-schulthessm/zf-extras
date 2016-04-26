@@ -2,7 +2,7 @@
 
 namespace ZfExtra\Mail;
 
-use Zend\Mail\Message;
+use Zend\Mail\Message as ZendMessage;
 
 /**
  * @author Alex Oleshkevich <alex.oleshkevich@gmail.com>
@@ -10,7 +10,7 @@ use Zend\Mail\Message;
 interface PluginInterface
 {
 
-    public function preSend(Message $message);
+    public function preSend(ZendMessage $message);
 
     public function postSend();
 }
