@@ -38,10 +38,11 @@ class DirectRenderer implements DirectRendererInterface
     public function render(ModelInterface $model)
     {
         $event = new ViewEvent;
+        $event->setName(ViewEvent::EVENT_RENDERER);
         $event->setModel($model);
-        $renderers = $this->view->getEventManager()->trigger(ViewEvent::EVENT_RENDERER, $event, function ($result) {
+        $renderers = $this->view->getEventManager()->triggerEventUntil(function ($result) {
             return $result instanceof RendererInterface;
-        });
+        }, $event);
         return $renderers->last()->render($model);
     }
 

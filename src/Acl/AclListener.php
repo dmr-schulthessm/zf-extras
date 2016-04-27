@@ -35,7 +35,7 @@ class AclListener extends AbstractListenerAggregate
         $this->roleResolver = $roleResolver;
     }
 
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         if (PHP_SAPI !== 'cli') {
             $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute']);
