@@ -29,7 +29,7 @@
         "zendframework/zend-serializer": "^2.7",
         "zendframework/zend-log": "^2.8",
         "zendframework/zend-http": "^2.5",
-        "alex-oleshkevich/zf-annotations": "^2.3",
+        "alex-oleshkevich/zf-annotations": "^2.2.4",
         "zendframework/zend-session": "^2.7",
         "zendframework/zend-mail": "^2.7",
         "zendframework/zend-permissions-acl": "^2.6",
