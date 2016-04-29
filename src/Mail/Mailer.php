@@ -73,10 +73,10 @@ class Mailer
             $plugin->preSend($mailMessage);
         }
         
-        $this->transport->send($mailMessage);
+        $result = $this->transport->send($mailMessage);
         
         foreach ($this->plugins as $plugin) {
-            $plugin->preSend($mailMessage);
+            $plugin->postSend($mailMessage, $result);
         }
     }
 

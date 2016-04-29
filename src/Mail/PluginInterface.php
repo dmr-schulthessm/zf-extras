@@ -12,5 +12,5 @@ interface PluginInterface
 
     public function preSend(ZendMessage $message);
 
-    public function postSend();
+    public function postSend(ZendMessage $message, $result);
 }
