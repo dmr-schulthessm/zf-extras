@@ -38,7 +38,7 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
         ));
         foreach ($data as $route) {
             $table->addRow(array(
-                $route['name'], $route['path'], $route['type'], $route['action'], $route['priority'], $route['mayTerminate']
+                $route['name'], $route['path'], $route['type'], $route['action'], $route['priority'], (int) $route['mayTerminate']
             ));
         }
         $table->render();
@@ -50,6 +50,19 @@ class DebugRouterCommand extends AbstractServiceLocatorAwareCommand
 
         $data = array();
         foreach ($routes as $name => $route) {
+            $defaults = [
+                'type' => '<undefined>',
+                'options' => [
+                    'route' => '<undefined>',
+                    'defaults' => [
+                        'controller' => '<undefined>',
+                        'action' => '<undefined>'
+                    ]
+                ],
+                'may_terminate' => true
+            ];
+            $route = array_replace_recursive($defaults, $route);
+            
             $data[] = array(
                 'name' => ltrim($parent . '/' . $name, '/'),
                 'path' => $parentPath . $route['options']['route'],
