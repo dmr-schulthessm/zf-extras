@@ -62,8 +62,8 @@ class AclListener extends AbstractListenerAggregate
         
         if ($acl->hasResource($resource)) {
             if (!$acl->isAllowed($this->getRole($event), $resource, $action)) {
-
-                if (!$this->getIdentity($event)) {
+                $identity = $this->getIdentity($event);
+                if (!$identity) {
                     $handler = $config->get('acl.violation_handlers.unauthenticated');
                     if (!$handler) {
                         return $this->triggerUnauthorizedError($app, $event);
@@ -76,9 +76,10 @@ class AclListener extends AbstractListenerAggregate
                     }
                     return false;
                 } else {
+                    $event->setName(MvcEvent::EVENT_DISPATCH_ERROR);
                     $event->setError('error-unauthorized-route');
                     $event->setParam('exception', new PermissionDeniedException('You are not authorized to access this page.'));
-                    return $app->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
+                    return $app->getEventManager()->triggerEvent($event);
                 }
             }
         } else {
@@ -150,9 +151,10 @@ class AclListener extends AbstractListenerAggregate
     protected function triggerUnauthorizedError(Application $app, MvcEvent $event)
     {
         $app->getServiceManager()->get('response')->setStatusCode(403);
+        $event->setName(MvcEvent::EVENT_DISPATCH_ERROR);
         $event->setError('error-unauthorized-route');
         $event->setParam('exception', new PermissionDeniedException('You are not authorized to access this page.', 403));
-        return $app->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
+        return $app->getEventManager()->triggerEvent($event);
     }
 
 }
