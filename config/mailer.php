@@ -1,10 +1,10 @@
 <?php
 
 use Zend\Mail\Transport\Sendmail;
+use ZfExtra\Mail\Mailer;
 use ZfExtra\Mail\Factory\MailerFactory;
 use ZfExtra\Mail\Factory\MessageFactoryFactory;
 use ZfExtra\Mail\MessageFactory;
-use ZfExtra\Mvc\Controller\Plugin\Mailer;
 
 return [
     'mailer' => [
@@ -21,6 +21,7 @@ return [
             MessageFactory::class => MessageFactoryFactory::class
         ],
         'aliases' => [
+            'mailer' => Mailer::class,
             'Mailer' => Mailer::class,
             'MessageFactory' => MessageFactory::class
         ],

@@ -10,12 +10,11 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Stdlib\ArrayUtils;
 use ZfExtra\Mvc\DoctrineObjectInjector;
 
-class DoctrineObjectInjectionListener extends AbstractListenerAggregate implements ServiceLocatorAwareInterface
+class DoctrineObjectInjectionListener extends AbstractListenerAggregate
 {
 
     use ServiceLocatorAwareTrait;
@@ -77,12 +76,11 @@ class DoctrineObjectInjectionListener extends AbstractListenerAggregate implemen
 
     public function onDispatch(MvcEvent $event)
     {
-        die(__METHOD__);
         /* @var $routeMatch RouteMatch */
         $routeMatch = $event->getRouteMatch();
         
         /* @var $injector DoctrineObjectInjector */
-        $injector = $this->serviceLocator->get('doctrine_object_injector');
+        $injector = $this->serviceLocator->get(DoctrineObjectInjector::class);
         
         $keysToRemove = array('controller', 'action');
         $params = $routeMatch->getParams();
