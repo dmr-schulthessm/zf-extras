@@ -34,7 +34,7 @@
         "zendframework/zend-mail": "^2.7",
         "zendframework/zend-permissions-acl": "^2.6",
         "zendframework/zend-navigation": "^2.7",
-        "doctrine/doctrine-orm-module": "^0.10.0",
+        "doctrine/doctrine-orm-module": "^0.10",
         "twig/twig": "^1.24",
         "symfony/console": "^3.0",
         "zendframework/zend-mime": "^2.6",
@@ -42,11 +42,5 @@
         "zendframework/zend-servicemanager": "^2.7 || ^3.0",
         "zendframework/zend-version": "^2.5",
         "zendframework/zend-text": "^2.6"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev",
-            "dev-dev": "2.0.x-dev"
-        }
     }
 }
