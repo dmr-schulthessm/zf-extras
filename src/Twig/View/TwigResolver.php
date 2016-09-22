@@ -32,7 +32,11 @@ class TwigResolver implements ResolverInterface
      */
     public function resolve($name, RendererInterface $renderer = null)
     {
+        // try .twig extension first
+        try {
+            $template = $this->environment->loadTemplate($name . '.twig');
+            return $template;
+        } catch (\Exception $skip) {}
         return $this->environment->loadTemplate($name);
     }
-
 }
