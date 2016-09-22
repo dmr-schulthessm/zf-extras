@@ -3,6 +3,7 @@
 namespace ZfExtra\Mail;
 
 use Exception;
+use Zend\Mail\Transport\Sendmail;
 use Zend\Mail\Transport\TransportInterface;
 
 /**
@@ -48,12 +49,18 @@ class Mailer
         if (!isset($options['transport']['name'])) {
             throw new Exception('No mail transport.');
         }
-
-        $this->transport = new $options['transport']['name'];
+        
+        $transportClass = $options['transport']['name'];
+        if ($transportClass == Sendmail::class && isset($options['transport']['options'])) {
+            $this->transport = new $transportClass($options['transport']['options']);
+        } else {
+            $this->transport = new $transportClass;
+        }
+        
         if (!$this->transport instanceof TransportInterface) {
             throw new Exception('Transport must implement Zend\Mail\Transport\TransportInterface');
         }
-
+        
         if (method_exists($this->transport, 'getOptions')) {
             $transportOptions = $this->transport->getOptions();
             $transportOptions->setFromArray($options['transport']['options']);

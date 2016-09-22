@@ -63,6 +63,7 @@ class MessageConverter
             $mailMessage->setEncoding($message->getEncoding());
             $mailMessage->setBody($message->getFilledBody());
         }
+        
         return $mailMessage;
     }
 
