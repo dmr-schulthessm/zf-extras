@@ -2,12 +2,10 @@
 
 namespace ZfExtra\Acl\Annotation;
 
-use Zend\Code\Annotation\AnnotationInterface;
-
 /**
  * @Annotation
  */
-class Acl implements AnnotationInterface
+class Acl
 {
 
     /**
@@ -21,15 +19,6 @@ class Acl implements AnnotationInterface
      * @var string
      */
     public $deny;
-
-    /**
-     * 
-     * @param string $content
-     */
-    public function initialize($content)
-    {
-        
-    }
 
     /**
      * 

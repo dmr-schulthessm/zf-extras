@@ -2,12 +2,10 @@
 
 namespace ZfExtra\Assertion\Annotation;
 
-use Zend\Code\Annotation\AnnotationInterface;
-
 /**
  * @Annotation
  */
-class Assert implements AnnotationInterface
+class Assert
 {
 
     /**
@@ -21,15 +19,6 @@ class Assert implements AnnotationInterface
      * @var array
      */
     public $options = array();
-
-    /**
-     * 
-     * @param string $content
-     */
-    public function initialize($content)
-    {
-        
-    }
 
     /**
      * 

@@ -21,6 +21,7 @@
         "zendframework/zend-i18n": "^2.7",
         "zendframework/zend-escaper": "^2.5",
         "zendframework/zend-cache": "^2.7",
+        "zendframework/zend-code": "^3.0",
         "zendframework/zend-console": "^2.6",
         "zendframework/zend-modulemanager": "^2.7",
         "zendframework/zend-eventmanager": "^3.0",
