@@ -21,7 +21,7 @@ class MessageConverter
         $mailMessage->setSubject($message->getSubject());
         $mailMessage->setFrom($message->getFrom());
         $mailMessage->setTo($message->getTo());
-        $mailMessage->setCc($mailMessage->getCc());
+        $mailMessage->setCc($message->getCc());
         $mailMessage->setBcc($message->getBcc());
         $mailMessage->setReplyTo($message->getReplyTo());
         $mailMessage->getHeaders()->addHeaders($message->getHeaders());

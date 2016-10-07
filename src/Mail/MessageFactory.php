@@ -3,6 +3,8 @@
 namespace ZfExtra\Mail;
 
 use Exception;
+use Zend\Mail\Address;
+use Zend\Mail\AddressList;
 
 /**
  *
@@ -39,7 +41,31 @@ class MessageFactory
         }
 
         $draft = new MessageDraft($this->config[$name]);
-        return new Message($draft->getFrom(), $draft->getTo(), $draft->getSubject(), $draft->getBody(), $draft->getType());
+        $message = new Message($draft->getFrom(), $draft->getTo(), $draft->getSubject(), $draft->getBody(), $draft->getType());
+        
+        $message->setCc($this->applyEmails($draft->getCc()));
+        $message->setBcc($this->applyEmails($draft->getBcc()));
+        return $message;
+    }
+    
+    /**
+     * 
+     * @param array $emails
+     * @return AddressList
+     */
+    private function applyEmails(array $emails)
+    {
+        $addressList = new AddressList;
+        
+        foreach ($emails as $email => $name) {
+            if (is_string($email)) {
+                $address = new Address($email, $name);
+            } else {
+                $address = new Address($name);
+            }
+            $addressList->add($address);
+        }
+        return $addressList;
     }
 
 }
