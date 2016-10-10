@@ -43,6 +43,7 @@ class MessageFactory
         $draft = new MessageDraft($this->config[$name]);
         $message = new Message($draft->getFrom(), $draft->getTo(), $draft->getSubject(), $draft->getBody(), $draft->getType());
         
+        $message->setEncoding($draft->getEncoding());
         $message->setCc($this->applyEmails($draft->getCc()));
         $message->setBcc($this->applyEmails($draft->getBcc()));
         return $message;

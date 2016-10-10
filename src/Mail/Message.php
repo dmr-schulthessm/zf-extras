@@ -96,7 +96,7 @@ class Message
      *
      * @var string
      */
-    protected $encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+    protected $encoding;
 
     /**
      *

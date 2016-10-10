@@ -55,6 +55,12 @@ class MessageDraft
      */
     protected $body;
 
+    /**
+     *
+     * @var string
+     */
+    protected $encoding;
+
     public function __construct(array $config)
     {
         $this->arrayToClassProperties($config);
@@ -134,6 +140,17 @@ class MessageDraft
     public function setBody($body)
     {
         $this->body = $body;
+        return $this;
+    }
+
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
         return $this;
     }
 
